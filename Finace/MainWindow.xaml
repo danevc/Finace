@@ -1,0 +1,23 @@
+﻿<Window x:Class="Finace.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Finace"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel Background="LightGray">
+            <Button BorderBrush="Azure" Background="Azure" Margin="0,0,0,2" Width="30" Click="HomeClick" Height="25">
+                <Image Source="\Assets\icons\home.png"></Image>
+            </Button>
+            <Button BorderBrush="Azure" Background="Azure" Margin="0,0,0,2" Width="30" Click="DashboardClick" Height="25">
+                <Image Source="\Assets\icons\dashboard.png"></Image>
+            </Button>
+            <Button BorderBrush="Azure" Background="Azure" Margin="0,0,0,2" Width="30" Click="SettingsClick" Height="25">
+                <Image Source="\Assets\icons\settings.png"></Image>
+            </Button>
+        </StackPanel>
+        <Frame Name="MainFrame" Background="Gray" NavigationUIVisibility="Hidden"/>
+    </DockPanel>
+</Window>
