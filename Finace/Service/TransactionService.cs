@@ -1,6 +1,4 @@
 ﻿using Finace.Service.Interfaces;
-using Serilog;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +10,6 @@ namespace Finace.Service
 {
     public class TransactionService : ITransactionsService
     {
-        public TransactionService(ILogger<TransactionService> logger)
-        {
-            
-        }
 
         public Transaction CreateTransaction(Transaction transaction)
         {

@@ -21,6 +21,7 @@ namespace Finace
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.Content = new HomePage();
         }
 
         private void HomeClick(object sender, EventArgs e)
