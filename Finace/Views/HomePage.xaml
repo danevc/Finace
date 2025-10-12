@@ -9,6 +9,6 @@
       Title="HomePage">
 
     <Grid Background="AliceBlue">
-        <TextBlock>Домашняя Страница </TextBlock>
+        <TextBlock Text="{Binding Title}"> </TextBlock>
     </Grid>
 </Page>

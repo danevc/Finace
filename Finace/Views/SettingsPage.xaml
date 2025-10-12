@@ -9,6 +9,6 @@
       Title="SettingsPage">
 
     <Grid Background="AliceBlue">
-        <TextBlock>Страница настроек</TextBlock>
+        <TextBlock Text="{Binding Title}"></TextBlock>
     </Grid>
 </Page>

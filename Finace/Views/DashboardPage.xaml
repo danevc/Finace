@@ -9,6 +9,6 @@
       Title="DashboardPage">
 
     <Grid Background="AliceBlue">
-        <TextBlock>Страница дашборд</TextBlock>
+        <TextBlock Text="{Binding Title}"></TextBlock>
     </Grid>
 </Page>

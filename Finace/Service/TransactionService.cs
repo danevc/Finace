@@ -1,4 +1,7 @@
 ﻿using Finace.Service.Interfaces;
+using Finace.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,14 @@ namespace Finace.Service
 {
     public class TransactionService : ITransactionsService
     {
+        private readonly ILogger<MainViewModel> _logger;
+        private readonly IConfiguration _config;
+
+        public TransactionService(ILogger<MainViewModel> logger, IConfiguration configuration)
+        {
+            _logger = logger;
+            _config = configuration;
+        }
 
         public Transaction CreateTransaction(Transaction transaction)
         {

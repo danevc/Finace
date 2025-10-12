@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finace.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,10 @@ namespace Finace.Views
     /// </summary>
     public partial class HomePage : Page
     {
-        public HomePage()
+        public HomePage(IHomeViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

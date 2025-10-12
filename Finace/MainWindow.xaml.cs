@@ -1,15 +1,6 @@
 ﻿using Finace.ViewModels;
 using Finace.Views;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Finace
 {
@@ -18,24 +9,37 @@ namespace Finace
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private HomePage _homePage;
+        private SettingsPage _settingsPage;
+        private DashboardPage _dashboardPage;
+
+        public MainWindow(IMainViewModel viewModel,
+            HomePage homePage,
+            SettingsPage settingsPage,
+            DashboardPage dashboardPage)
         {
             InitializeComponent();
-            MainFrame.Content = new HomePage();
+
+            _homePage = homePage;
+            _settingsPage = settingsPage;
+            _dashboardPage = dashboardPage;
+
+            DataContext = viewModel;
+            MainFrame.Content = _homePage;
         }
 
         private void HomeClick(object sender, EventArgs e)
         {
-            MainFrame.Content = new HomePage();
+            MainFrame.Content = _homePage;
         }
         private void SettingsClick(object sender, EventArgs e)
         {
-            MainFrame.Content = new SettingsPage();
+            MainFrame.Content = _settingsPage;
         }
 
         private void DashboardClick(object sender, EventArgs e)
         {
-            MainFrame.Content = new DashboardPage();
+            MainFrame.Content = _dashboardPage;
         }
     }
 }
