@@ -1,11 +1,7 @@
-﻿using Finace.ViewModels;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using Finace.Options;
-using Finace.Service.Interfaces;
-using Finace.Service;
-using Finace.Views;
 
 namespace Finace
 {
@@ -19,7 +15,6 @@ namespace Finace
         protected override void OnStartup(StartupEventArgs e)
         {
             var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
@@ -28,6 +23,7 @@ namespace Finace
 
             serviceCollection.AddSingleton<IConfiguration>(configuration);
             serviceCollection.Configure<Settings>(configuration);
+            serviceCollection.AddAppServices();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -35,24 +31,8 @@ namespace Finace
             mainWindow.Show();
         }
 
-        private void ConfigureServices(IServiceCollection services)
-        {
-            services.AddLogging();
-            services.AddSingleton<HomePage>();
-            services.AddSingleton<SettingsPage>();
-            services.AddSingleton<DashboardPage>();
-            services.AddSingleton<HomePage>();
-            services.AddSingleton<IMainViewModel, MainViewModel>();
-            services.AddSingleton<ITransactionsService, TransactionService>();
-            services.AddSingleton<IHomeViewModel, HomeViewModel>();
-            services.AddSingleton<ISettingsViewModel, SettingsViewModel>();
-            services.AddSingleton<IDashboardViewModel, DashboardViewModel>();
-            services.AddSingleton<MainWindow>();
-        }
-
         private void OnExit(object sender, ExitEventArgs e)
         {
-            // Dispose of services if needed
             if (_serviceProvider is IDisposable disposable)
             {
                 disposable.Dispose();

@@ -8,7 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Grid Background="AliceBlue">
-        <TextBlock Text="{Binding Title}"> </TextBlock>
+    <Grid Background="{StaticResource TaupeGrayDarkBrush}">
+        <TabControl >
+            <TabItem Header="Расход">
+                    <Button Content="Кнопка"
+                        Background="{StaticResource XanthousBrush}"
+                        Foreground="White" Height="30"/>
+            </TabItem>
+            <TabItem Header="Доход">Вторая вкладка</TabItem>
+            <TabItem Header="Перевод">Вторая вкладка</TabItem>
+        </TabControl>
     </Grid>
 </Page>

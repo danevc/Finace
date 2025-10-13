@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Finace.Views
-{
+{ 
     /// <summary>
     /// Логика взаимодействия для SettingsPage.xaml
     /// </summary>

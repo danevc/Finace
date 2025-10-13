@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Finace.Controls.MenuButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="root" Height="50" Width="50">
+    <UserControl.Resources>
+        <Style x:Key="MenuButtonInnerStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BlackOliveLightBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BlackOliveLightBrush}" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsActive, ElementName=root}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource BlackOliveBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource BlackOliveBrush}" />
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Button x:Name="InnerButton"
+            Style="{StaticResource MenuButtonInnerStyle}"
+            Margin="0,0,0,2"
+            Click="Button_Click">
+        <Image Source="{Binding Icon, ElementName=root}" Stretch="Uniform" Width="30" Height="30"/>
+    </Button>
+</UserControl>

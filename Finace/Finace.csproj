@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\icons\close.png" />
     <None Remove="Assets\icons\dashboard.png" />
     <None Remove="Assets\icons\home.png" />
+    <None Remove="Assets\icons\plus.png" />
+    <None Remove="Assets\icons\rollup.png" />
     <None Remove="Assets\icons\settings.png" />
   </ItemGroup>
 
@@ -25,10 +28,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\icons\close.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\icons\dashboard.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\icons\home.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\icons\plus.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\icons\rollup.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\icons\settings.png">
@@ -40,6 +52,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Pages\" />
   </ItemGroup>
 
 </Project>
