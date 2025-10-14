@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Finace.Controls.TabButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="root">
+    <UserControl.Resources>
+        <Style x:Key="TabButtonInnerStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource DimGrayLightBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource DimGrayLightBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource EggshellDarkBrush}" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsActive, ElementName=root}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DimGrayBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource DimGrayBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource EggshellLightBrush}" />
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Button x:Name="InnerButton"
+            Style="{StaticResource TabButtonInnerStyle}"
+            Margin="0,0,0,2"
+            Click="Button_Click"
+            Content="{Binding Text, ElementName=root}">
+    </Button>
+</UserControl>

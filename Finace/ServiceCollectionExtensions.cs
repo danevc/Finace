@@ -2,6 +2,7 @@
 using Finace.Service;
 using Finace.ViewModels;
 using Finace.Views;
+using Finace.Views.Pages;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Finace
@@ -17,6 +18,10 @@ namespace Finace
             services.AddSingleton<HomePage>();
             services.AddSingleton<SettingsPage>();
             services.AddSingleton<DashboardPage>();
+
+            services.AddSingleton<IncomePage>();
+            services.AddSingleton<CostPage>();
+            services.AddSingleton<TransferPage>();
 
             // ViewModels
             services.AddSingleton<IMainViewModel, MainViewModel>();

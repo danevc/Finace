@@ -7,15 +7,15 @@ namespace Finace.Controls
     /// <summary>
     /// Логика взаимодействия для MenuButton.xaml
     /// </summary>
-    public partial class MenuButton : UserControl
+    public partial class TabButton : UserControl
     {
-        public MenuButton()
+        public TabButton()
         {
             InitializeComponent();
         }
 
         public static readonly DependencyProperty IsActiveProperty =
-            DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(MenuButton), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(TabButton), new PropertyMetadata(false));
 
         public bool IsActive
         {
@@ -23,13 +23,13 @@ namespace Finace.Controls
             set => SetValue(IsActiveProperty, value);
         }
 
-        public static readonly DependencyProperty IconProperty =
-            DependencyProperty.Register(nameof(Icon), typeof(ImageSource), typeof(MenuButton), new PropertyMetadata(null));
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(TabButton), new PropertyMetadata(null));
 
-        public ImageSource Icon
+        public string Text
         {
-            get => (ImageSource)GetValue(IconProperty);
-            set => SetValue(IconProperty, value);
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         public event RoutedEventHandler Click;

@@ -1,0 +1,42 @@
+﻿<Page x:Class="Finace.Views.Pages.CostPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Finace.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CostPage">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource DimGrayLightBrush}" Padding="30,8,30,10">
+            <Grid>
+                <TextBox x:Name="SearchBox"
+                     Padding="10,0,35,0"
+                     VerticalContentAlignment="Center"
+                     FontSize="25"
+                     Text="$ 22345.01"
+                     Background="{StaticResource DimGrayDarkBrush}"
+                     Foreground="{StaticResource EggshellLightBrush}"/>
+                <Button 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,5,0"
+                    Background="Transparent"
+                    BorderBrush="{x:Null}"
+                    Cursor="Hand"
+                    Foreground="{StaticResource EggshellLightBrush}"
+                    Content=">>"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource DimGrayBrush}" Padding="30,8,30,10">
+            
+        </Border>
+    </Grid>
+</Page>

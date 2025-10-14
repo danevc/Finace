@@ -3,6 +3,7 @@ using Finace.ViewModels;
 using Finace.Views;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Finace
@@ -30,7 +31,7 @@ namespace Finace
             _navButtons = new[] { plusButton, settingsButton, dashboardButton };
 
             DataContext = viewModel;
-            MainFrame.Content = _homePage;
+            SetFrame(_homePage, plusButton);
         }
 
         private void HomeClick(object sender, RoutedEventArgs e)
@@ -55,6 +56,12 @@ namespace Finace
         private void RollUp(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                this.DragMove(); // 'this' = текущее окно
         }
 
         private void SetFrame(Page page, MenuButton activeButton)

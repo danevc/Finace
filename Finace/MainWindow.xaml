@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:Finace.Controls"
         mc:Ignorable="d"
         Title="Finace" Height="700" Width="1000"
-        Background="{StaticResource BlackOliveBrush}"
+        Background="{StaticResource BlackOliveDarkBrush}"
         AllowsTransparency="true"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
@@ -22,30 +22,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <DockPanel LastChildFill="False">
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button 
-                        Height="25" 
-                        Width="40" 
-                        Click="RollUp" 
-                        Background="#7985E2" 
-                        Foreground="{StaticResource EggshellLightBrush}">
-                        <Image 
-                            Source="Assets/icons/rollup.png"
-                            Height="15"/>
-                    </Button>
-                    <Button 
-                        Height="25" 
-                        Width="50" 
-                        Click="Close" 
-                        Background="#D96554"
-                        Foreground="{StaticResource EggshellLightBrush}">
-                        <Image 
-                            Source="Assets/icons/close.png" 
-                               Height="15"/>
-                    </Button>
-                </StackPanel>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+            <DockPanel LastChildFill="True" Height="25">
+                <Button 
+                    Width="50" 
+                    Click="Close" 
+                    Background="#D96554"
+                    Foreground="{StaticResource EggshellLightBrush}" 
+                    DockPanel.Dock="Right">
+                    <Image Source="Assets/icons/close.png" Height="15"/>
+                </Button>
+                <Button 
+                    Width="40" 
+                    Click="RollUp" 
+                    Background="#7985E2" 
+                    Foreground="{StaticResource EggshellLightBrush}" 
+                    DockPanel.Dock="Right">
+                    <Image Source="Assets/icons/rollup.png" Height="15"/>
+                </Button>
+                <Grid MouseDown="TitleBar_MouseDown" Background="Transparent"/>
             </DockPanel>
         </Border>
 
