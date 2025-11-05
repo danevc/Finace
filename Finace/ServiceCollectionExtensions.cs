@@ -1,8 +1,7 @@
-﻿using Finace.Service.Interfaces;
-using Finace.Service;
+﻿using Finace.Service;
+using Finace.Service.Interfaces;
 using Finace.ViewModels;
 using Finace.Views;
-using Finace.Views.Pages;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Finace
@@ -15,19 +14,15 @@ namespace Finace
             services.AddLogging();
 
             // Pages 
-            services.AddSingleton<HomePage>();
+            services.AddSingleton<BudgetPage>();
             services.AddSingleton<SettingsPage>();
             services.AddSingleton<DashboardPage>();
 
-            services.AddSingleton<IncomePage>();
-            services.AddSingleton<CostPage>();
-            services.AddSingleton<TransferPage>();
-
             // ViewModels
             services.AddSingleton<IMainViewModel, MainViewModel>();
-            services.AddSingleton<IHomeViewModel, HomeViewModel>();
             services.AddSingleton<ISettingsViewModel, SettingsViewModel>();
             services.AddSingleton<IDashboardViewModel, DashboardViewModel>();
+            services.AddSingleton<IBudgetViewModel, BudgetViewModel>();
 
             // Services
             services.AddSingleton<ITransactionsService, TransactionService>();

@@ -4,7 +4,6 @@ using Finace.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Finace
 {
@@ -13,30 +12,30 @@ namespace Finace
     /// </summary>
     public partial class MainWindow : Window
     {
-        private HomePage _homePage;
+        private BudgetPage _budgetPage;
         private SettingsPage _settingsPage;
         private DashboardPage _dashboardPage;
         private readonly MenuButton[] _navButtons;
 
         public MainWindow(IMainViewModel viewModel,
-            HomePage homePage,
+            BudgetPage budgetPage,
             SettingsPage settingsPage,
             DashboardPage dashboardPage)
         {
             InitializeComponent();
 
-            _homePage = homePage;
+            _budgetPage = budgetPage;
             _settingsPage = settingsPage;
             _dashboardPage = dashboardPage;
-            _navButtons = new[] { plusButton, settingsButton, dashboardButton };
+            _navButtons = [budgetPageButton, settingsButton, dashboardButton];
 
             DataContext = viewModel;
-            SetFrame(_homePage, plusButton);
+            SetFrame(_budgetPage, budgetPageButton);
         }
 
-        private void HomeClick(object sender, RoutedEventArgs e)
+        private void BudgetPageClick(object sender, RoutedEventArgs e)
         {
-            SetFrame(_homePage, plusButton);
+            SetFrame(_budgetPage, budgetPageButton);
         }
         private void SettingsClick(object sender, RoutedEventArgs e)
         {
@@ -61,7 +60,7 @@ namespace Finace
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove(); // 'this' = текущее окно
+                this.DragMove(); 
         }
 
         private void SetFrame(Page page, MenuButton activeButton)

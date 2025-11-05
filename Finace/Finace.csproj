@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\icons\BudgetButtonIcon.png" />
     <None Remove="Assets\icons\close.png" />
     <None Remove="Assets\icons\dashboard.png" />
     <None Remove="Assets\icons\home.png" />
@@ -25,9 +26,13 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
+    <PackageReference Include="WPF-UI" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\icons\BudgetButtonIcon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\icons\close.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

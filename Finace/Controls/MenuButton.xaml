@@ -4,8 +4,8 @@
              x:Name="root" Height="50" Width="50">
     <UserControl.Resources>
         <Style x:Key="MenuButtonInnerStyle" TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource BlackOliveLightBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BlackOliveLightBrush}" />
+            <Setter Property="Background" Value="#37342D" />
+            <Setter Property="BorderBrush" Value="#37342D" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -13,7 +13,7 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="4"
+                                CornerRadius="0"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -22,8 +22,8 @@
             </Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsActive, ElementName=root}" Value="True">
-                    <Setter Property="Background" Value="{StaticResource BlackOliveBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource BlackOliveBrush}" />
+                    <Setter Property="Background" Value="#2C2A24" />
+                    <Setter Property="BorderBrush" Value="#2C2A24" />
                 </DataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="0.9"/>

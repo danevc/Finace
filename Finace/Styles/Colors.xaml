@@ -20,5 +20,5 @@
     <Color x:Key="DimGrayDark">#57524C</Color>
     <Color x:Key="DimGray">#6E675F</Color>
     <Color x:Key="DimGrayLight">#888077</Color>
-    
+
 </ResourceDictionary>

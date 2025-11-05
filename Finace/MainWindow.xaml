@@ -6,65 +6,56 @@
         xmlns:local="clr-namespace:Finace"
         xmlns:controls="clr-namespace:Finace.Controls"
         mc:Ignorable="d"
-        Title="Finace" Height="700" Width="1000"
-        Background="{StaticResource BlackOliveDarkBrush}"
+        Title="Finace"
+        Height="700"
+        Width="1000"
+        Background="#46433D"
         AllowsTransparency="true"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None">
+        WindowStyle="None"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="25"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"
+                           MinHeight="20" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
-            <DockPanel LastChildFill="True" Height="25">
-                <Button 
-                    Width="50" 
-                    Click="Close" 
-                    Background="#D96554"
-                    Foreground="{StaticResource EggshellLightBrush}" 
-                    DockPanel.Dock="Right">
-                    <Image Source="Assets/icons/close.png" Height="15"/>
-                </Button>
-                <Button 
-                    Width="40" 
-                    Click="RollUp" 
-                    Background="#7985E2" 
-                    Foreground="{StaticResource EggshellLightBrush}" 
-                    DockPanel.Dock="Right">
-                    <Image Source="Assets/icons/rollup.png" Height="15"/>
-                </Button>
-                <Grid MouseDown="TitleBar_MouseDown" Background="Transparent"/>
-            </DockPanel>
+        <Border Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+            <ui:TitleBar Title="Finace"
+                         Height="30" />
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="0" Background="LightGreen">
-            <StackPanel Orientation="Vertical" Background="{StaticResource BlackOliveBrush}">
-                <controls:MenuButton 
-                        x:Name="plusButton"
-                        Icon="Assets/icons/plus.png"
-                        Click="HomeClick"/>
-                <controls:MenuButton 
-                        x:Name="settingsButton"
-                        Icon="Assets/icons/settings.png"
-                        Click="SettingsClick"/>
-                <controls:MenuButton 
-                        x:Name="dashboardButton"
-                        Icon="Assets/icons/dashboard.png"
-                        Click="DashboardClick"/>
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Background="LightGreen">
+            <StackPanel Orientation="Vertical"
+                        Background="#37342D">
+                <controls:MenuButton x:Name="budgetPageButton"
+                                     Icon="Assets/icons/BudgetButtonIcon.png"
+                                     Click="BudgetPageClick" />
+                <controls:MenuButton x:Name="settingsButton"
+                                     Icon="Assets/icons/settings.png"
+                                     Click="SettingsClick" />
+                <controls:MenuButton x:Name="dashboardButton"
+                                     Icon="Assets/icons/dashboard.png"
+                                     Click="DashboardClick" />
             </StackPanel>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="1" Background="LightCoral">
-            <Frame Name="MainFrame" 
-               Background="{StaticResource DimGrayBrush}" 
-               NavigationUIVisibility="Hidden"/>
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                Background="LightCoral">
+            <Frame Name="MainFrame"
+                   Background="#272520"
+                   NavigationUIVisibility="Hidden" />
         </Border>
     </Grid>
 </Window>
