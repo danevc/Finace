@@ -13,9 +13,9 @@ namespace Finace.Converters
                 // Меняем цвет в зависимости от процента заполнения
                 return percentage switch
                 {
-                    < 70 => new SolidColorBrush(Color.FromRgb(76, 175, 80)),    // Зеленый
-                    < 90 => new SolidColorBrush(Color.FromRgb(255, 152, 0)),    // Оранжевый
-                    _ => new SolidColorBrush(Color.FromRgb(244, 67, 54))        // Красный
+                    < 90 => new SolidColorBrush(Color.FromRgb(69, 108, 60)),
+                    < 110 => new SolidColorBrush(Color.FromRgb(105, 42, 15)),
+                    _ => new SolidColorBrush(Color.FromRgb(105, 15, 17)) 
                 };
             }
             return new SolidColorBrush(Colors.Gray);

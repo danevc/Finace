@@ -1,59 +1,84 @@
-﻿using System;
-
-namespace Finace.Models;
-
-/// <summary>
-/// Транзакция
-/// </summary>
-public class Transaction
+﻿namespace Finace.Models
 {
     /// <summary>
-    /// Уникальный идентификатор
+    /// Представляет запись о финансовой операции в системе
+    /// Содержит полную информацию о движении денежных средств между счетами
     /// </summary>
-    public long TransactionId { get; set; }
+    public class Transaction
+    {
+        /// <summary>
+        /// Уникальный идентификатор финансовой записи
+        /// </summary>
+        public int Id { get; set; }
 
-    /// <summary>
-    /// Дата создания
-    /// </summary>
-    public DateTime CreatedOn { get; set; }
+        /// <summary>
+        /// Дата и время проведения операции
+        /// </summary>
+        public DateTime Date { get; set; }
 
-    /// <summary>
-    /// Пользователь
-    /// </summary>
-    public User User { get; set; }
+        /// <summary>
+        /// Наименование счета-источника или счета-получателя
+        /// </summary>
+        public string? Account { get; set; }
 
-    /// <summary>
-    /// Сумма
-    /// </summary>
-    public int Amount { get; set; }
+        /// <summary>
+        /// Сумма операции
+        /// </summary>
+        public decimal Amount { get; set; }
 
-    /// <summary>
-    /// Категория
-    /// </summary>
-    public Category Category { get; set; }
+        /// <summary>
+        /// Валюта операции (RUB, USD, EUR и т.д.)
+        /// </summary>
+        public string? Currency { get; set; }
 
-    /// <summary>
-    /// Дата операции
-    /// </summary>
-    public DateTime OperationDate { get; set; }
+        /// <summary>
+        /// Родительская категория для группировки операций
+        /// </summary>
+        public string? ParentCategory { get; set; }
 
-    /// <summary>
-    /// Счет списания
-    /// </summary>
-    public Account DebitAccount { get; set; }
+        /// <summary>
+        /// Подкатегория для детальной классификации
+        /// </summary>
+        public string? SubCategory { get; set; }
 
-    /// <summary>
-    /// Счет зачисления 
-    /// </summary>
-    public Account TransferAccount { get; set; }
+        /// <summary>
+        /// Основная категория операции (еда, транспорт, зарплата и т.д.)
+        /// </summary>
+        public string? Category { get; set; }
 
-    /// <summary>
-    /// доход, расход, перевод
-    /// </summary>
-    public string Type { get; set; }
+        /// <summary>
+        /// Контрагент операции (магазин, банк, организация)
+        /// </summary>
+        public string? Counterparty { get; set; }
 
-    /// <summary>
-    /// Тэг
-    /// </summary>
-    public Tag Tag { get; set; }
+        /// <summary>
+        /// Счет для переводов между счетами
+        /// </summary>
+        public string? TransferAccount { get; set; }
+
+        /// <summary>
+        /// Сумма перевода между счетами (для операций трансфера)
+        /// </summary>
+        public decimal? TransferAmount { get; set; }
+
+        /// <summary>
+        /// Валюта перевода между счетами
+        /// </summary>
+        public string? TransferCurrency { get; set; }
+
+        /// <summary>
+        /// Теги для дополнительной маркировки и фильтрации операций
+        /// </summary>
+        public string? Tags { get; set; }
+
+        /// <summary>
+        /// Место совершения операции (город, магазин, онлайн и т.д.)
+        /// </summary>
+        public string? Location { get; set; }
+
+        /// <summary>
+        /// Дополнительные заметки и комментарии к операции
+        /// </summary>
+        public string? Note { get; set; }
+    }
 }

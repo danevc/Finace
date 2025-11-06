@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Finace.Options
+﻿namespace Finace.Options
 {
     public class Settings
     {
-        public string ApplicationName { get; set; } = "";
-        public string Version { get; set; } = "";
+        public string? Folder { get; set; }
+
+        public List<string>? CategoriesIncome { get; set; }
+
+        public List<string>? CategoriesNecessarily { get; set; }
+
+        public List<string>? Tags { get; set; }
+
+        public int? TotalBudgetNecessarily { get; set; }
+
+        public int? TotalBudgetNotNecessarily { get; set; }
     }
 }

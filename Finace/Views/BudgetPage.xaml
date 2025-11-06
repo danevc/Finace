@@ -8,10 +8,10 @@
       d:DesignWidth="800"
       Title="BudgetPage"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
-    <Grid>
+    <Grid Margin="10,0,10,15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="500" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -28,59 +28,22 @@
                 <ComboBox Margin="0,0,30,0"
                           Width="120"
                           ItemsSource="{Binding Years}"
-                          SelectedItem="{Binding SelectedYear}" />
+                          SelectedItem="{Binding SelectedYear}"
+                          SelectionChanged="YearMonth_SelectionChanged"/>
                 <ComboBox Width="120"
                           ItemsSource="{Binding Months}"
-                          SelectedItem="{Binding SelectedMonth}" />
+                          SelectedItem="{Binding SelectedMonth}"
+                          SelectionChanged="YearMonth_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource MonthToIntConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"
                 Grid.Column="0"
-                Background="#272520">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Text="Обязательные траты"
-                           Style="{StaticResource CustomTextStyle}"
-                           FontSize="16"
-                           Margin="0,2,0,2" />
-                <Border Grid.Row="1"
-                        Height="19"
-                        Background="{StaticResource BlackOliveLightBrush}"
-                        CornerRadius="8"
-                        x:Name="ProgressBarContainer_NotNecessarily"
-                        HorizontalAlignment="Center"
-                        Width="220">
-                    <Grid>
-                        <Border CornerRadius="8"
-                                HorizontalAlignment="Left">
-                            <Border.Background>
-                                <Binding Path="Percentage"
-                                         Converter="{StaticResource PercentageToColorConverter}" />
-                            </Border.Background>
-                            <Border.Width>
-                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
-                                    <Binding Path="Percentage" />
-                                    <Binding ElementName="ProgressBarContainer_NotNecessarily"
-                                             Path="ActualWidth" />
-                                </MultiBinding>
-                            </Border.Width>
-                        </Border>
-                        <TextBlock Text="15 000 / 30 000 (50%)"
-                                   Style="{StaticResource CustomTextStyle}" />
-                    </Grid>
-                </Border>
-                <ListBox Grid.Row="2"
-                         ItemsSource="{Binding NotNecessarilyList}"
-                         Style="{StaticResource ExpenseListBoxStyle}" />
-            </Grid>
-        </Border>
-        <Border Grid.Row="1"
-                Grid.Column="1"
                 Background="#272520">
             <Grid>
                 <Grid.RowDefinitions>
@@ -104,23 +67,68 @@
                         <Border CornerRadius="8"
                                 HorizontalAlignment="Left">
                             <Border.Background>
-                                <Binding Path="Percentage"
+                                <Binding Path="NecessarilyPercentage"
                                          Converter="{StaticResource PercentageToColorConverter}" />
                             </Border.Background>
                             <Border.Width>
                                 <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
-                                    <Binding Path="Percentage" />
+                                    <Binding Path="NecessarilyPercentage" />
                                     <Binding ElementName="ProgressBarContainer_Necessarily"
                                              Path="ActualWidth" />
                                 </MultiBinding>
                             </Border.Width>
                         </Border>
-                        <TextBlock Text="15 000 / 30 000 (50%)"
+                        <TextBlock Text="{Binding NecessarilyProgressBarText}"
                                    Style="{StaticResource CustomTextStyle}" />
                     </Grid>
                 </Border>
                 <ListBox Grid.Row="2"
                          ItemsSource="{Binding NecessarilyList}"
+                         Style="{StaticResource ExpenseListBoxStyle}" />
+            </Grid>
+        </Border>
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                Background="#272520">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Необязательные траты"
+                           Style="{StaticResource CustomTextStyle}"
+                           FontSize="16"
+                           Margin="0,2,0,2" />
+                <Border Grid.Row="1"
+                        Height="19"
+                        Background="{StaticResource BlackOliveLightBrush}"
+                        CornerRadius="8"
+                        x:Name="ProgressBarContainer_NotNecessarily"
+                        HorizontalAlignment="Center"
+                        Width="220">
+                    <Grid>
+                        <Border CornerRadius="8"
+                                HorizontalAlignment="Left">
+                            <Border.Background>
+                                <Binding Path="NotNecessarilyPercentage"
+                                         Converter="{StaticResource PercentageToColorConverter}" />
+                            </Border.Background>
+                            <Border.Width>
+                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                    <Binding Path="NotNecessarilyPercentage" />
+                                    <Binding ElementName="ProgressBarContainer_NotNecessarily"
+                                             Path="ActualWidth" />
+                                </MultiBinding>
+                            </Border.Width>
+                        </Border>
+                        <TextBlock Text="{Binding NotNecessarilyProgressBarText}"
+                                   Style="{StaticResource CustomTextStyle}" />
+                    </Grid>
+                </Border>
+                <ListBox Grid.Row="2"
+                         ItemsSource="{Binding NotNecessarilyList}"
                          Style="{StaticResource ExpenseListBoxStyle}" />
             </Grid>
         </Border>
@@ -134,7 +142,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="Обязательные траты"
+                           Text="Все траты"
                            Style="{StaticResource CustomTextStyle}"
                            FontSize="16"
                            Margin="0,2,0,2" />
@@ -142,30 +150,30 @@
                         Height="19"
                         Background="{StaticResource BlackOliveLightBrush}"
                         CornerRadius="8"
-                        x:Name="ProgressBarContainer_Total"
+                        x:Name="ProgressBarContainer_TotalCostToTotalIncome"
                         HorizontalAlignment="Center"
                         Width="220">
                     <Grid>
                         <Border CornerRadius="8"
                                 HorizontalAlignment="Left">
                             <Border.Background>
-                                <Binding Path="Percentage"
+                                <Binding Path="TotalCostToTotalIncomePercentage"
                                          Converter="{StaticResource PercentageToColorConverter}" />
                             </Border.Background>
                             <Border.Width>
                                 <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
-                                    <Binding Path="Percentage" />
-                                    <Binding ElementName="ProgressBarContainer_Total"
+                                    <Binding Path="TotalCostToTotalIncomePercentage" />
+                                    <Binding ElementName="ProgressBarContainer_TotalCostToTotalIncome"
                                              Path="ActualWidth" />
                                 </MultiBinding>
                             </Border.Width>
                         </Border>
-                        <TextBlock Text="15 000 / 30 000 (50%)"
+                        <TextBlock Text="{Binding TotalCostToTotalIncomeProgressBarText}"
                                    Style="{StaticResource CustomTextStyle}" />
                     </Grid>
                 </Border>
                 <ListBox Grid.Row="2"
-                         ItemsSource="{Binding NecessarilyList}"
+                         ItemsSource="{Binding TotalCostList}"
                          Style="{StaticResource ExpenseListBoxStyle}" />
             </Grid>
         </Border>

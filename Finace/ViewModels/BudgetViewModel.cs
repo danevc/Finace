@@ -1,32 +1,157 @@
-﻿using Finace.Models;
+﻿using Finace.Helpers;
+using Finace.Models;
+using Finace.Options;
 using Finace.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.Windows.Input;
+using System.Runtime.CompilerServices;
 
 namespace Finace.ViewModels
 {
-    public interface IBudgetViewModel
+    public interface IBudgetViewModel 
     {
-
+        public void DatesChanged();
     }
 
-    public class BudgetViewModel : IBudgetViewModel
+    public class BudgetViewModel : IBudgetViewModel, INotifyPropertyChanged
     {
-        private List<ExpenseCategory> _notNecessarilyList;
-        public List<ExpenseCategory> NotNecessarilyList { get { return _notNecessarilyList; } set { _notNecessarilyList = value; } }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private List<ExpenseCategory> _necessarilyList;
-        public List<ExpenseCategory> NecessarilyList { get { return _necessarilyList; } set { _necessarilyList = value; } }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-        public double Percentage => 50;
+        #region Property
+        private ObservableCollection<ExpenseCategory> _notNecessarilyList;
+        public ObservableCollection<ExpenseCategory> NotNecessarilyList
+        {
+            get { return _notNecessarilyList; }
+            set
+            {
+                _notNecessarilyList = value;
+                OnPropertyChanged(nameof(NotNecessarilyList));
+            }
+        }
 
+        private ObservableCollection<ExpenseCategory> _necessarilyList;
+        public ObservableCollection<ExpenseCategory> NecessarilyList
+        {
+            get { return _necessarilyList; }
+            set
+            {
+                _necessarilyList = value;
+                OnPropertyChanged(nameof(NecessarilyList));
+            }
+        }
+
+        private ObservableCollection<ExpenseCategory> _totalCostList;
+        public ObservableCollection<ExpenseCategory> TotalCostList
+        {
+            get { return _totalCostList; }
+            set
+            {
+                _totalCostList = value;
+                OnPropertyChanged(nameof(TotalCostList));
+            }
+        }
+
+        private double _notNecessarilyPercentage;
+        public double NotNecessarilyPercentage
+        {
+            get => _notNecessarilyPercentage;
+            set
+            {
+                if (_notNecessarilyPercentage != value)
+                {
+                    _notNecessarilyPercentage = value;
+                    OnPropertyChanged();
+
+                    // Если нужно обновить зависимые свойства
+                    OnPropertyChanged(nameof(NotNecessarilyProgressBarText));
+                }
+            }
+        }
+
+        private double _necessarilyPercentage;
+        public double NecessarilyPercentage
+        {
+            get => _necessarilyPercentage;
+            set
+            {
+                if (_necessarilyPercentage != value)
+                {
+                    _necessarilyPercentage = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NecessarilyProgressBarText));
+                }
+            }
+        }
+
+        private double _totalCostToTotalIncomePercentage;
+        public double TotalCostToTotalIncomePercentage
+        {
+            get => _totalCostToTotalIncomePercentage;
+            set
+            {
+                if (_totalCostToTotalIncomePercentage != value)
+                {
+                    _totalCostToTotalIncomePercentage = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalCostToTotalIncomeProgressBarText));
+                }
+            }
+        }
+
+        private string _necessarilyProgressBarText;
+        public string NecessarilyProgressBarText
+        {
+            get => _necessarilyProgressBarText;
+            set
+            {
+                if (_necessarilyProgressBarText != value)
+                {
+                    _necessarilyProgressBarText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _notNecessarilyProgressBarText;
+        public string NotNecessarilyProgressBarText
+        {
+            get => _notNecessarilyProgressBarText;
+            set
+            {
+                if (_notNecessarilyProgressBarText != value)
+                {
+                    _notNecessarilyProgressBarText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _totalCostToTotalIncomeProgressBarText;
+        public string TotalCostToTotalIncomeProgressBarText
+        {
+            get => _totalCostToTotalIncomeProgressBarText;
+            set
+            {
+                if (_totalCostToTotalIncomeProgressBarText != value)
+                {
+                    _totalCostToTotalIncomeProgressBarText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<int> Months { get; set; }
         public ObservableCollection<int> Years { get; set; }
-        private int? _selectedYear;
 
+        private int? _selectedYear;
         public int? SelectedYear
         {
             get => _selectedYear;
@@ -37,10 +162,8 @@ namespace Finace.ViewModels
             }
         }
 
-        public ObservableCollection<string> Months { get; set; }
-        private string? _selectedMonth;
-
-        public string? SelectedMonth
+        private int? _selectedMonth;
+        public int? SelectedMonth
         {
             get => _selectedMonth;
             set
@@ -50,30 +173,63 @@ namespace Finace.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private readonly ILogger<MainViewModel> _logger;
-        private readonly IConfiguration _config;
-        private readonly ITransactionsService _service;
+        private readonly Settings _config;
+        private readonly IBudgetService _service;
+        #endregion
 
-        public BudgetViewModel(ILogger<MainViewModel> logger, IConfiguration configuration, ITransactionsService service)
+        public BudgetViewModel(ILogger<MainViewModel> logger, IOptions<Settings> configuration, IBudgetService service)
         {
             _logger = logger;
-            _config = configuration;
+            _config = configuration.Value;
             _service = service;
-            _notNecessarilyList = new List<ExpenseCategory> {
-                new() { Category = "cat1", Amount = 200},
-                new() { Category = "cat2", Amount = 21},
-                new() { Category = "cat2", Amount = 321},
-                new() { Category = "cat2", Amount = 451}
-            }.OrderByDescending(e => e.Amount).ToList();
-            _necessarilyList = new List<ExpenseCategory> { new ExpenseCategory { Category = "cat3", Amount = 200 }, new ExpenseCategory { Category = "cat4", Amount = 2001 } };
+            //_necessarilyList = new List<ExpenseCategory> { new ExpenseCategory { Category = "cat3", Amount = 200 }, new ExpenseCategory { Category = "cat4", Amount = 2001 } };
 
+            initDates();
+        }
+
+        public void DatesChanged()
+        {
+            var period = MonthHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
+
+            var necessarilyList = _service.GetBudgetNecessarilyForPeriod(period);
+            var notNecessarilyList = _service.GetBudgetNotNecessarilyForPeriod(period);
+            var totalCostIncomeList = _service.GetTotalCostForPeriod(period);
+            var totalIncomeList = _service.GetTotalIncomeForPeriod(period);
+
+            var necessarilySum = (double)necessarilyList.Sum(e => e.Amount);
+            var notNecessarilySum = (double)notNecessarilyList.Sum(e => e.Amount);
+
+            var totalCostSum = (double)totalCostIncomeList.Sum(e => e.Amount);
+            var totalIncomeSum = (double)totalIncomeList.Sum(e => e.Amount);
+
+            var necessarilyPrecentage = (double)(necessarilySum / _config.TotalBudgetNecessarily ?? 0);
+            var notNecessarilyPrecentage = (double)(notNecessarilySum / _config.TotalBudgetNotNecessarily  ?? 0);
+            var totalPrecentage = (double)(totalCostSum / totalIncomeSum);
+
+            NecessarilyPercentage = necessarilyPrecentage * 100;
+            NotNecessarilyPercentage = notNecessarilyPrecentage * 100;
+            TotalCostToTotalIncomePercentage = totalPrecentage * 100;
+
+            NecessarilyProgressBarText = $"{necessarilySum:N0} / {_config.TotalBudgetNecessarily:N0} ({necessarilyPrecentage:P1})";
+            NotNecessarilyProgressBarText = $"{notNecessarilySum:N0} / {_config.TotalBudgetNotNecessarily:N0} ({notNecessarilyPrecentage:P1})";
+            TotalCostToTotalIncomeProgressBarText = $"{totalCostSum:N0} / {totalIncomeSum:N0} ({totalPrecentage:P1})";
+
+            NecessarilyList = new ObservableCollection<ExpenseCategory>(necessarilyList.OrderByDescending(e => e.Amount).ToList());
+            NotNecessarilyList = new ObservableCollection<ExpenseCategory>(notNecessarilyList.OrderByDescending(e => e.Amount).ToList());
+            TotalCostList = new ObservableCollection<ExpenseCategory>(totalCostIncomeList.OrderByDescending(e => e.Amount).ToList());
+        }
+
+        private void initDates()
+        {
+            Months = new ObservableCollection<int>();
             Years = new ObservableCollection<int>();
-            for (int i = DateTime.Now.Year; i >= 2025; i--)
+
+            for (int i = 2025; i <= DateTime.Now.Year; i++)
                 Years.Add(i);
-            
-            Months = new ObservableCollection<string>(DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToArray());
+
+            for (int i = 1; i <= 12; i++)
+                Months.Add(i);
 
             SelectedMonth = Months[DateTime.Now.Month - 1];
             SelectedYear = DateTime.Now.Year;

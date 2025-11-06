@@ -3,6 +3,8 @@
                     xmlns:converters="clr-namespace:Finace.Converters">
     <converters:PercentageToColorConverter x:Key="PercentageToColorConverter" />
     <converters:PercentageToWidthConverter x:Key="PercentageToWidthConverter" />
+    <converters:MonthToIntConverter x:Key="MonthToIntConverter" />
+    
     <Style x:Key="CustomTextStyle"
            TargetType="TextBlock">
         <Setter Property="FontSize"
@@ -15,6 +17,8 @@
                 Value="Center" />
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
+        <Setter Property="Margin"
+                Value="0,0,0,2" />
     </Style>
     <DataTemplate x:Key="ExpenseCategoryTemplate">
         <Border BorderBrush="#655E5E"
@@ -23,7 +27,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Category}"
                            FontSize="14"
@@ -31,11 +35,10 @@
                            Foreground="{DynamicResource EggshellLightBrush}"
                            HorizontalAlignment="Left" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding Amount, StringFormat={}{0:C}}"
+                           Text="{Binding Amount, StringFormat={}{0:N0}, ConverterCulture=ru-RU}"
                            FontSize="14"
                            Foreground="{DynamicResource EggshellLightBrush}"
-                           HorizontalAlignment="Right"
-                           Margin="10,0,0,0" />
+                           HorizontalAlignment="Right"/>
             </Grid>
         </Border>
     </DataTemplate>
@@ -49,6 +52,10 @@
                 Value="{DynamicResource DimGrayLightBrush}" />
         <Setter Property="ItemTemplate"
                 Value="{StaticResource ExpenseCategoryTemplate}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                Value="Auto" />
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
@@ -73,7 +80,9 @@
                             BorderBrush="#37342D"
                             BorderThickness="6"
                             CornerRadius="10">
-                        <ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      Padding="0">
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>

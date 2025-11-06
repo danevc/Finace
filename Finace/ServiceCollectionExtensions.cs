@@ -25,6 +25,7 @@ namespace Finace
             services.AddSingleton<IBudgetViewModel, BudgetViewModel>();
 
             // Services
+            services.AddSingleton<IBudgetService, BudgetService>();
             services.AddSingleton<ITransactionsService, TransactionService>();
 
             // Main window
