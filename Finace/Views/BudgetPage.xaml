@@ -26,11 +26,11 @@
                         VerticalAlignment="Center"
                         Margin="15">
                 <ComboBox Margin="0,0,30,0"
-                          Width="120"
+                          Width="140"
                           ItemsSource="{Binding Years}"
                           SelectedItem="{Binding SelectedYear}"
                           SelectionChanged="YearMonth_SelectionChanged"/>
-                <ComboBox Width="120"
+                <ComboBox Width="140"
                           ItemsSource="{Binding Months}"
                           SelectedItem="{Binding SelectedMonth}"
                           SelectionChanged="YearMonth_SelectionChanged">
@@ -40,6 +40,14 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <CheckBox x:Name="includeTags"
+                          IsThreeState="False"
+                          IsChecked="{Binding IncludeTagsCheckBox}"
+                          Height="25"
+                          Content="Теги"
+                          Checked="includeTags_Checked"
+                          Unchecked="includeTags_Unchecked"
+                          Margin="30,0,0,0"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"

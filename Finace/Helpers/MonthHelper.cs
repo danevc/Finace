@@ -7,10 +7,16 @@ namespace Finace.Helpers
         public static Period GetCurrentMonth()
         {
             var today = DateTime.Now;
+
+            var startDate = new DateTime(today.Year, today.Month, 1);
+            var endDate = new DateTime(today.Year, today.Month, 1).AddMonths(1).AddSeconds(-1);
+
+            if(endDate >  today) endDate = today;
+
             return new Period
             {
-                startDate = new DateTime(today.Year, today.Month, 1),
-                endDate = new DateTime(today.Year, today.Month, 1).AddMonths(1).AddSeconds(-1)
+                startDate = startDate,
+                endDate = endDate
             };
         }
 
@@ -18,10 +24,17 @@ namespace Finace.Helpers
         {
             if (year == null || month == null) return GetCurrentMonth();
 
+            var today = DateTime.Now;
+
+            var startDate = new DateTime((int)year, (int)month, 1);
+            var endDate = new DateTime((int)year, (int)month, 1).AddMonths(1).AddSeconds(-1);
+
+            if (endDate > today) endDate = today;
+
             return new Period
             {
-                startDate = new DateTime((int)year, (int)month, 1),
-                endDate = new DateTime((int)year, (int)month, 1).AddMonths(1).AddSeconds(-1)
+                startDate = startDate,
+                endDate = endDate
             };
         }
     }

@@ -2,7 +2,6 @@
 using Finace.Models;
 using Finace.Options;
 using Finace.Service.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
@@ -13,7 +12,7 @@ namespace Finace.ViewModels
 {
     public interface IBudgetViewModel 
     {
-        public void DatesChanged();
+        public void UpdatePage();
     }
 
     public class BudgetViewModel : IBudgetViewModel, INotifyPropertyChanged
@@ -26,6 +25,23 @@ namespace Finace.ViewModels
         }
 
         #region Property
+        private bool _includeTagsCheckBox;
+        public bool IncludeTagsCheckBox
+        {
+            get => _includeTagsCheckBox;
+            set
+            {
+                if (_includeTagsCheckBox != value)
+                {
+                    _includeTagsCheckBox = value;
+                    OnPropertyChanged();
+
+                    // Если нужно обновить зависимые свойства
+                    OnPropertyChanged(nameof(IncludeTagsCheckBox));
+                }
+            }
+        }
+
         private ObservableCollection<ExpenseCategory> _notNecessarilyList;
         public ObservableCollection<ExpenseCategory> NotNecessarilyList
         {
@@ -175,27 +191,26 @@ namespace Finace.ViewModels
 
         private readonly ILogger<MainViewModel> _logger;
         private readonly Settings _config;
-        private readonly IBudgetService _service;
+        private readonly IStatisticService _service;
         #endregion
 
-        public BudgetViewModel(ILogger<MainViewModel> logger, IOptions<Settings> configuration, IBudgetService service)
+        public BudgetViewModel(ILogger<MainViewModel> logger, IOptions<Settings> configuration, IStatisticService service)
         {
             _logger = logger;
             _config = configuration.Value;
             _service = service;
-            //_necessarilyList = new List<ExpenseCategory> { new ExpenseCategory { Category = "cat3", Amount = 200 }, new ExpenseCategory { Category = "cat4", Amount = 2001 } };
 
             initDates();
         }
 
-        public void DatesChanged()
+        public void UpdatePage()
         {
             var period = MonthHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
 
-            var necessarilyList = _service.GetBudgetNecessarilyForPeriod(period);
-            var notNecessarilyList = _service.GetBudgetNotNecessarilyForPeriod(period);
-            var totalCostIncomeList = _service.GetTotalCostForPeriod(period);
-            var totalIncomeList = _service.GetTotalIncomeForPeriod(period);
+            var necessarilyList = _service.GetBudgetNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var notNecessarilyList = _service.GetBudgetNotNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var totalCostIncomeList = _service.GetTotalCostForPeriod(period, IncludeTagsCheckBox);
+            var totalIncomeList = _service.GetTotalIncomeForPeriod(period, IncludeTagsCheckBox);
 
             var necessarilySum = (double)necessarilyList.Sum(e => e.Amount);
             var notNecessarilySum = (double)notNecessarilyList.Sum(e => e.Amount);

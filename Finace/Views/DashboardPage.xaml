@@ -1,14 +1,129 @@
 ﻿<Page x:Class="Finace.Views.DashboardPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Finace.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
       Title="DashboardPage">
 
-    <Grid Background="{StaticResource TaupeGrayDarkBrush}">
-        <TextBlock Text="{Binding Title}"></TextBlock>
+    <Grid Margin="10,0,10,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="3">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,10,20,10">
+
+                <StackPanel x:Name="YearMonthPick"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <ComboBox Margin="30,0,30,0"
+                              Width="140"
+                              ItemsSource="{Binding Years}"
+                              SelectedItem="{Binding SelectedYear}"
+                              SelectionChanged="YearMonth_SelectionChanged" />
+                    <ComboBox Width="140"
+                              ItemsSource="{Binding Months}"
+                              SelectedItem="{Binding SelectedMonth}"
+                              SelectionChanged="YearMonth_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource MonthToIntConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel x:Name="DateTimePick"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <DatePicker x:Name="DateTimePick_From"
+                                SelectedDate="{Binding DateFrom}"
+                                IsTodayHighlighted="True"
+                                Width="140"
+                                Margin="30,0,30,0"
+                                SelectedDateChanged="DateTimePick_To_SelectedDateChanged" />
+                    <DatePicker x:Name="DateTimePick_To"
+                                SelectedDate="{Binding DateTo}"
+                                IsTodayHighlighted="True"
+                                Width="140"
+                                SelectedDateChanged="DateTimePick_To_SelectedDateChanged" />
+                </StackPanel>
+
+                <CheckBox x:Name="AnyDateCheckBox"
+                          Height="25"
+                          IsThreeState="False"
+                          IsChecked="{Binding AnyDateCheckBox}"
+                          Content="Произвольная дата"
+                          Checked="AnyDate_Checked"
+                          Unchecked="AnyDate_Unchecked"></CheckBox>
+            </StackPanel>
+        </Border>
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="16"
+                   Margin="10,10,20,10">БАЛАНС ЗА ПЕРИОД</TextBlock>
+        <Border Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="20,0,20,20">
+            <lvc:CartesianChart Series="{Binding Series_Balance}"
+                                XAxes="{Binding XAxes}"
+                                YAxes="{Binding YAxes}" />
+        </Border>
+        <StackPanel Grid.Row="3"
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+            <TextBlock Grid.Row="3"
+                       Grid.Column="0"
+                       Style="{StaticResource CustomTextStyle}"
+                       FontSize="16"
+                       Margin="10,10,0,10">ТОП КАТЕГОРИИ</TextBlock>
+            <CheckBox x:Name="includeTags_TopCategories"
+                      IsThreeState="False"
+                      IsChecked="{Binding IncludeTagsCheckBox}"
+                      Height="25"
+                      Content="Теги"
+                      Checked="includeTags_TopCategories_Checked"
+                      Unchecked="includeTags_TopCategories_Unchecked"
+                      Margin="0,0,0,0" />
+        </StackPanel>
+        <Border Grid.Row="4"
+                Grid.Column="0"
+                Margin="10">
+            <lvc:PieChart Series="{Binding Series_TopCatgories}" />
+        </Border>
+        <TextBlock Grid.Row="3"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="3"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="16"
+                   Margin="10,10,20,10">ДИНАМИКА КАТЕГОРИЙ</TextBlock>
+        <Border Grid.Row="4"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Margin="10">
+            <lvc:CartesianChart Series="{Binding Series_DynamicCatgories}"
+                                XAxes="{Binding XAxes}"
+                                YAxes="{Binding YAxes}" />
+        </Border>
     </Grid>
 </Page>

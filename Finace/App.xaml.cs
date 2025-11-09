@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Finace.Options;
+using LiveChartsCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using Finace.Options;
 
 namespace Finace
 {
@@ -29,6 +30,8 @@ namespace Finace
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+            LiveCharts.Configure(c => c
+            .AddLiveChartsAppSettings());
         }
 
         private void OnExit(object sender, ExitEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using Finace.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Finace.Views
@@ -19,7 +20,17 @@ namespace Finace.Views
 
         private void YearMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _budgetViewModel.DatesChanged();
+            _budgetViewModel.UpdatePage();
+        }
+
+        private void includeTags_Checked(object sender, RoutedEventArgs e)
+        {
+            _budgetViewModel.UpdatePage();
+        }
+
+        private void includeTags_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _budgetViewModel.UpdatePage();
         }
     }
 }
