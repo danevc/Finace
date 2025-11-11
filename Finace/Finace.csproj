@@ -28,6 +28,7 @@
 		<None Remove="Assets\icons\plus.png" />
 		<None Remove="Assets\icons\rollup.png" />
 		<None Remove="Assets\icons\settings.png" />
+		<None Remove="Assets\icons\wallet-passes-app.png" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,9 @@
     </Resource>
     <Resource Include="Assets\icons\settings.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\icons\wallet-passes-app.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 

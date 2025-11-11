@@ -1,8 +1,8 @@
 ﻿namespace Finace.Models
 {
-    public class ExpenseCategory
+    public class CategoryAmount
     {
         public string Category { get; set; }
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
     }
 }

@@ -42,8 +42,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<ExpenseCategory> _notNecessarilyList;
-        public ObservableCollection<ExpenseCategory> NotNecessarilyList
+        private ObservableCollection<CategoryAmount> _notNecessarilyList;
+        public ObservableCollection<CategoryAmount> NotNecessarilyList
         {
             get { return _notNecessarilyList; }
             set
@@ -53,8 +53,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<ExpenseCategory> _necessarilyList;
-        public ObservableCollection<ExpenseCategory> NecessarilyList
+        private ObservableCollection<CategoryAmount> _necessarilyList;
+        public ObservableCollection<CategoryAmount> NecessarilyList
         {
             get { return _necessarilyList; }
             set
@@ -64,8 +64,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<ExpenseCategory> _totalCostList;
-        public ObservableCollection<ExpenseCategory> TotalCostList
+        private ObservableCollection<CategoryAmount> _totalCostList;
+        public ObservableCollection<CategoryAmount> TotalCostList
         {
             get { return _totalCostList; }
             set
@@ -205,17 +205,17 @@ namespace Finace.ViewModels
 
         public void UpdatePage()
         {
-            var period = MonthHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
+            var period = DatesHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
 
-            var necessarilyList = _service.GetBudgetNecessarilyForPeriod(period, IncludeTagsCheckBox);
-            var notNecessarilyList = _service.GetBudgetNotNecessarilyForPeriod(period, IncludeTagsCheckBox);
-            var totalCostIncomeList = _service.GetTotalCostForPeriod(period, IncludeTagsCheckBox);
-            var totalIncomeList = _service.GetTotalIncomeForPeriod(period, IncludeTagsCheckBox);
+            var necessarilyList = _service.BudgetNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var notNecessarilyList = _service.BudgetNotNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var totalCostList = _service.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
+            var totalIncomeList = _service.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
 
             var necessarilySum = (double)necessarilyList.Sum(e => e.Amount);
             var notNecessarilySum = (double)notNecessarilyList.Sum(e => e.Amount);
 
-            var totalCostSum = (double)totalCostIncomeList.Sum(e => e.Amount);
+            var totalCostSum = (double)totalCostList.Sum(e => e.Amount);
             var totalIncomeSum = (double)totalIncomeList.Sum(e => e.Amount);
 
             var necessarilyPrecentage = (double)(necessarilySum / _config.TotalBudgetNecessarily ?? 0);
@@ -230,9 +230,9 @@ namespace Finace.ViewModels
             NotNecessarilyProgressBarText = $"{notNecessarilySum:N0} / {_config.TotalBudgetNotNecessarily:N0} ({notNecessarilyPrecentage:P1})";
             TotalCostToTotalIncomeProgressBarText = $"{totalCostSum:N0} / {totalIncomeSum:N0} ({totalPrecentage:P1})";
 
-            NecessarilyList = new ObservableCollection<ExpenseCategory>(necessarilyList.OrderByDescending(e => e.Amount).ToList());
-            NotNecessarilyList = new ObservableCollection<ExpenseCategory>(notNecessarilyList.OrderByDescending(e => e.Amount).ToList());
-            TotalCostList = new ObservableCollection<ExpenseCategory>(totalCostIncomeList.OrderByDescending(e => e.Amount).ToList());
+            NecessarilyList = new ObservableCollection<CategoryAmount>(necessarilyList.OrderByDescending(e => e.Amount).ToList());
+            NotNecessarilyList = new ObservableCollection<CategoryAmount>(notNecessarilyList.OrderByDescending(e => e.Amount).ToList());
+            TotalCostList = new ObservableCollection<CategoryAmount>(totalCostList.OrderByDescending(e => e.Amount).ToList());
         }
 
         private void initDates()

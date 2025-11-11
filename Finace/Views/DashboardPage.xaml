@@ -17,15 +17,17 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Border Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="3">
+                Grid.ColumnSpan="4">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Margin="0,10,20,10">
@@ -37,7 +39,13 @@
                               Width="140"
                               ItemsSource="{Binding Years}"
                               SelectedItem="{Binding SelectedYear}"
-                              SelectionChanged="YearMonth_SelectionChanged" />
+                              SelectionChanged="YearMonth_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource YearToDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ComboBox Width="140"
                               ItemsSource="{Binding Months}"
                               SelectedItem="{Binding SelectedMonth}"
@@ -77,53 +85,79 @@
         </Border>
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
-                   Grid.ColumnSpan="3"
+                   Grid.ColumnSpan="4"
                    Style="{StaticResource CustomTextStyle}"
                    FontSize="16"
                    Margin="10,10,20,10">БАЛАНС ЗА ПЕРИОД</TextBlock>
         <Border Grid.Row="2"
                 Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Margin="20,0,20,20">
+                Grid.ColumnSpan="4"
+                Margin="10,0,10,10">
             <lvc:CartesianChart Series="{Binding Series_Balance}"
                                 XAxes="{Binding XAxes}"
                                 YAxes="{Binding YAxes}" />
         </Border>
-        <StackPanel Grid.Row="3"
-                    Grid.Column="0"
-                    Orientation="Horizontal">
-            <TextBlock Grid.Row="3"
-                       Grid.Column="0"
-                       Style="{StaticResource CustomTextStyle}"
-                       FontSize="16"
-                       Margin="10,10,0,10">ТОП КАТЕГОРИИ</TextBlock>
-            <CheckBox x:Name="includeTags_TopCategories"
-                      IsThreeState="False"
-                      IsChecked="{Binding IncludeTagsCheckBox}"
-                      Height="25"
-                      Content="Теги"
-                      Checked="includeTags_TopCategories_Checked"
-                      Unchecked="includeTags_TopCategories_Unchecked"
-                      Margin="0,0,0,0" />
-        </StackPanel>
-        <Border Grid.Row="4"
-                Grid.Column="0"
-                Margin="10">
-            <lvc:PieChart Series="{Binding Series_TopCatgories}" />
+        <Border  Grid.Row="3"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="4">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Cursor="">
+                <TextBlock Style="{StaticResource CustomTextStyle}"
+                           FontSize="16"
+                           Margin="10,10,0,10">КАТЕГОРИИ</TextBlock>
+                <CheckBox x:Name="includeTags_TopCategories"
+                          IsThreeState="False"
+                          IsChecked="{Binding IncludeTagsCheckBox}"
+                          Height="25"
+                          Content="Теги"
+                          Checked="includeTags_TopCategories_Checked"
+                          Unchecked="includeTags_TopCategories_Unchecked" />
+                <TextBlock Style="{StaticResource CustomTextStyle}"
+                           FontSize="12">Среднее для</TextBlock>
+                <TextBox FontSize="12"
+                         Width="55"
+                         Height="35"
+                         Text="{Binding DaysForAverage, UpdateSourceTrigger=PropertyChanged}"
+                         TextChanged="TextBox_DataContextChanged"
+                         Margin="5"/>
+                <TextBlock Style="{StaticResource CustomTextStyle}"
+                           FontSize="12">дней.</TextBlock>
+            </StackPanel>
         </Border>
-        <TextBlock Grid.Row="3"
-                   Grid.Column="1"
-                   Grid.ColumnSpan="3"
+
+        <ListBox Grid.Row="4"
+                 Grid.Column="0"
+                 ItemsSource="{Binding TotalCostList}"
+                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <ListBox Grid.Row="4"
+                 Grid.Column="1"
+                 ItemsSource="{Binding AverageCostList}"
+                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <ListBox Grid.Row="4"
+                 Grid.Column="2"
+                 ItemsSource="{Binding TotalIncomeList}"
+                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <ListBox Grid.Row="4"
+                 Grid.Column="3"
+                 ItemsSource="{Binding AverageIncomeList}"
+                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <TextBlock Grid.Row="5"
+                   Grid.Column="0"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="16"
-                   Margin="10,10,20,10">ДИНАМИКА КАТЕГОРИЙ</TextBlock>
-        <Border Grid.Row="4"
-                Grid.Column="1"
-                Grid.ColumnSpan="3"
-                Margin="10">
-            <lvc:CartesianChart Series="{Binding Series_DynamicCatgories}"
-                                XAxes="{Binding XAxes}"
-                                YAxes="{Binding YAxes}" />
-        </Border>
+                   FontSize="12">Расход</TextBlock>
+        <TextBlock Grid.Row="5"
+                   Grid.Column="1"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12">Средний расход</TextBlock>
+        <TextBlock Grid.Row="5"
+                   Grid.Column="2"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12">Доход</TextBlock>
+        <TextBlock Grid.Row="5"
+                   Grid.Column="3"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12">Средний доход</TextBlock>
     </Grid>
 </Page>

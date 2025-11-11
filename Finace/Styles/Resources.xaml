@@ -4,7 +4,8 @@
     <converters:PercentageToColorConverter x:Key="PercentageToColorConverter" />
     <converters:PercentageToWidthConverter x:Key="PercentageToWidthConverter" />
     <converters:MonthToIntConverter x:Key="MonthToIntConverter" />
-    
+    <converters:YearToDisplayConverter x:Key="YearToDisplayConverter" />
+
     <Style x:Key="CustomTextStyle"
            TargetType="TextBlock">
         <Setter Property="FontSize"

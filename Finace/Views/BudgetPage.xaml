@@ -47,7 +47,7 @@
                           Content="Теги"
                           Checked="includeTags_Checked"
                           Unchecked="includeTags_Unchecked"
-                          Margin="30,0,0,0"/>
+                          Margin="20,0,0,0"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"

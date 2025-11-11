@@ -5,17 +5,19 @@ using System.IO;
 
 namespace Finace.Service
 {
-    public interface ITransactionsService { public List<Models.Transaction>? Transactions { get; set; } }
+    public interface ITransactionsService { public List<Models.Transaction>? Transactions { get; set; } public DateTime? FirstTransactionDate { get; set; } }
 
     public class TransactionService : ITransactionsService
     {
         public List<Models.Transaction>? Transactions { get; set; }
         private Settings _settings;
+        public DateTime? FirstTransactionDate { get; set; }
 
         public TransactionService(IOptions<Settings> configuration)
         {
             _settings = configuration.Value;
             FillTransactionsFromCSV();
+            FirstTransactionDate = Transactions?.Min(e => e.Date);
         }
 
         private void FillTransactionsFromCSV()

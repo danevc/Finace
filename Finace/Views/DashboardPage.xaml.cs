@@ -46,12 +46,26 @@ namespace Finace.Views
 
         private void includeTags_TopCategories_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            _dashboardViewModel.UpdateCategories();
         }
 
         private void includeTags_TopCategories_Checked(object sender, RoutedEventArgs e)
         {
+            _dashboardViewModel.UpdateCategories();
+        }
 
+        private void TextBox_DataContextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            try
+            {
+                Convert.ToDouble(textBox.Text);
+                _dashboardViewModel.UpdateCategories();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректный ввод");
+            }
         }
     }
 }

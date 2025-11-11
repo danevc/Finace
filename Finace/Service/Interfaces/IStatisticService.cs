@@ -4,14 +4,14 @@ namespace Finace.Service.Interfaces
 {
     public interface IStatisticService
     {
-        public List<DataPoint> GetTotalForPeriod(Period period);
+        public List<DataPoint> BalanceForPeriod(Period? period);
 
-        public List<ExpenseCategory> GetBudgetNecessarilyForPeriod(Period period, bool includeTags);
+        public List<CategoryAmount> BudgetNecessarilyForPeriod(Period? period, bool includeTags);
 
-        public List<ExpenseCategory> GetBudgetNotNecessarilyForPeriod(Period period, bool includeTags);
+        public List<CategoryAmount> BudgetNotNecessarilyForPeriod(Period? period, bool includeTags);
 
-        public List<ExpenseCategory> GetTotalCostForPeriod(Period period, bool includeTags);
+        public List<CategoryAmount> CategoryExpensesForPeriod(Period? period, bool includeTags, int take = int.MaxValue);
 
-        public List<ExpenseCategory> GetTotalIncomeForPeriod(Period period, bool includeTags);
+        public List<CategoryAmount> CategoryIncomeForPeriod(Period? period, bool includeTags);
     }
 }

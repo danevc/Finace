@@ -9,12 +9,23 @@
         Title="Finace"
         Height="700"
         Width="1000"
+        MinHeight="500"
+        MinWidth="800"
         Background="#46433D"
         AllowsTransparency="true"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
-    <Grid>
+        ResizeMode="CanResize"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="40"
+                            ResizeBorderThickness="6"
+                            GlassFrameThickness="0"
+                            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+    <Grid MouseDown="Grid_MouseDown">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"
                            MinHeight="20" />
@@ -41,12 +52,12 @@
                 <controls:MenuButton x:Name="budgetPageButton"
                                      Icon="Assets/icons/BudgetButtonIcon.png"
                                      Click="BudgetPageClick" />
-                <controls:MenuButton x:Name="settingsButton"
-                                     Icon="Assets/icons/settings.png"
-                                     Click="SettingsClick" />
                 <controls:MenuButton x:Name="dashboardButton"
                                      Icon="Assets/icons/dashboard.png"
                                      Click="DashboardClick" />
+                <controls:MenuButton x:Name="settingsButton"
+                                     Icon="Assets/icons/settings.png"
+                                     Click="SettingsClick" />
             </StackPanel>
         </Border>
 
@@ -55,7 +66,11 @@
                 Background="LightCoral">
             <Frame Name="MainFrame"
                    Background="#272520"
-                   NavigationUIVisibility="Hidden" />
+                   NavigationUIVisibility="Hidden"/>
         </Border>
+        <Border x:Name="FocusCatcher"
+                Background="Transparent"
+                Focusable="True" />
+        
     </Grid>
 </Window>
