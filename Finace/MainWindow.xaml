@@ -7,8 +7,8 @@
         xmlns:controls="clr-namespace:Finace.Controls"
         mc:Ignorable="d"
         Title="Finace"
-        Height="700"
-        Width="1000"
+        Height="770"
+        Width="1200"
         MinHeight="500"
         MinWidth="800"
         Background="#46433D"
@@ -17,7 +17,8 @@
         WindowStyle="None"
         ResizeMode="CanResize"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework">
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Icon="/Assets/icons/money-flow.png">
     <shell:WindowChrome.WindowChrome>
         <shell:WindowChrome CaptionHeight="40"
                             ResizeBorderThickness="6"
@@ -46,18 +47,17 @@
 
         <Border Grid.Row="1"
                 Grid.Column="0"
-                Background="LightGreen">
+                Background="LightGreen"
+                MinWidth="55">
             <StackPanel Orientation="Vertical"
-                        Background="#37342D">
+                        Background="#37342D"
+                        MinWidth="55">
                 <controls:MenuButton x:Name="budgetPageButton"
-                                     Icon="Assets/icons/BudgetButtonIcon.png"
+                                     Icon="Assets/icons/budget-icon.png"
                                      Click="BudgetPageClick" />
                 <controls:MenuButton x:Name="dashboardButton"
                                      Icon="Assets/icons/dashboard.png"
                                      Click="DashboardClick" />
-                <controls:MenuButton x:Name="settingsButton"
-                                     Icon="Assets/icons/settings.png"
-                                     Click="SettingsClick" />
             </StackPanel>
         </Border>
 

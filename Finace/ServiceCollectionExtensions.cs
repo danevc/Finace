@@ -15,12 +15,9 @@ namespace Finace
 
             // Pages 
             services.AddSingleton<BudgetPage>();
-            services.AddSingleton<SettingsPage>();
             services.AddSingleton<DashboardPage>();
 
             // ViewModels
-            services.AddSingleton<IMainViewModel, MainViewModel>();
-            services.AddSingleton<ISettingsViewModel, SettingsViewModel>();
             services.AddSingleton<IDashboardViewModel, DashboardViewModel>();
             services.AddSingleton<IBudgetViewModel, BudgetViewModel>();
 

@@ -1,5 +1,4 @@
-﻿using Finace.Helpers;
-using Finace.Models;
+﻿using Finace.Models;
 using Finace.Options;
 using Finace.Service.Interfaces;
 using Microsoft.Extensions.Options;
@@ -26,14 +25,11 @@ namespace Finace.Service
             _transactionService = transactionService;
         }
 
-        public List<DataPoint> BalanceForPeriod(Period? period)
+        public List<DataPoint> BalanceForPeriod(Period period)
         {
             var result = new List<DataPoint>();
 
             if (_allTransactions is null || !_allTransactions.Any()) return result;
-
-            if (period == null) 
-                period = new Period{startDate = _transactionService.FirstTransactionDate!.Value, endDate = DateTime.Now};
 
             var transactionsForPeriod = _allTransactions
                 .Where(r => r.Date >= period.startDate && r.Date <= period.endDate)

@@ -54,6 +54,11 @@ namespace Finace.Views
             _dashboardViewModel.UpdateCategories();
         }
 
+        private void Unit_Average_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            _dashboardViewModel.UpdateCategories();
+        }
+
         private void TextBox_DataContextChanged(object sender, RoutedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;

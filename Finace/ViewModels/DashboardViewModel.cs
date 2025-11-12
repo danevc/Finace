@@ -5,8 +5,6 @@ using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -30,17 +28,24 @@ namespace Finace.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string _daysForAverage;
-        public string DaysForAverage
+        private string _unitAverage = "день";
+        public string UnitAverage
         {
-            get => _daysForAverage;
+            get => _unitAverage;
+            set { _unitAverage = value; OnPropertyChanged(); }
+        }
+
+        private string _daysOrMonthsForAverage;
+        public string DaysOrMonthsForAverage
+        {
+            get => _daysOrMonthsForAverage;
             set
             {
-                if (_daysForAverage != value)
+                if (_daysOrMonthsForAverage != value)
                 {
-                    _daysForAverage = value;
+                    _daysOrMonthsForAverage = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(DaysForAverage));
+                    OnPropertyChanged(nameof(DaysOrMonthsForAverage));
                 }
             }
         }
@@ -200,6 +205,12 @@ namespace Finace.ViewModels
             {
                 _selectedYear = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYear)));
+
+                var period = DatesHelper.GetMonthPeriodByDateAndMonth(_selectedYear, _selectedMonth);
+                if (period == null) return;
+
+                DateFrom = period.startDate;
+                DateTo = period.endDate;
             }
         }
 
@@ -211,43 +222,60 @@ namespace Finace.ViewModels
             {
                 _selectedMonth = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedMonth)));
+
+                var period = DatesHelper.GetMonthPeriodByDateAndMonth(_selectedYear, _selectedMonth);
+                if (period == null) return;
+
+                DateFrom = period.startDate;
+                DateTo = period.endDate;
             }
         }
 
-        private readonly ILogger<MainViewModel> _logger;
-        private readonly IConfiguration _config;
-        private readonly IStatisticService _service;
+        private readonly IStatisticService _statisticService;
+        private readonly ITransactionsService _transactionService;
 
         #endregion
 
-        public DashboardViewModel(ILogger<MainViewModel> logger, IConfiguration configuration, IStatisticService service)
+        public DashboardViewModel(IStatisticService statisticService, ITransactionsService transactionService)
         {
-            _logger = logger;
-            _config = configuration;
-            _service = service;
+            _statisticService = statisticService;
+            _transactionService = transactionService;
+
             initDates();
             DateFormatter = value => new DateTime((long)value).ToString("dd MMM");
-            DaysForAverage = "30,44";
+            DaysOrMonthsForAverage = "1";
+            IncludeTagsCheckBox = true;
+            UnitAverage = "месяц";
         }
 
         public void UpdatePage()
         {
-            var period = AnyDateCheckBox ?
-                new Models.Period { startDate = DateFrom, endDate = DateTo }
-                :  DatesHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
+            var period = CalculatePeriod();
 
-            var values = _service.BalanceForPeriod(period);
+            var values = _statisticService.BalanceForPeriod(period).OrderBy(e => e.Date)
+                                   .Select(v => new DateTimePoint(v.Date, v.Amount))
+                                   .ToArray();
+
+            if (Series_Balance != null &&
+                Series_Balance.Length > 0 &&
+                Series_Balance[0].Values is IEnumerable<DateTimePoint> oldValues &&
+                oldValues.Count() == values.Length &&
+                oldValues.Zip(values, (a, b) => a.DateTime == b.DateTime && a.Value == b.Value).All(x => x))
+            {
+                return;
+            }
 
             Series_Balance = new ISeries[]
             {
                 new LineSeries<DateTimePoint>
                 {
                     Name = "Баланс",
-                    Values = values.OrderBy(e => e.Date)
-                                   .Select(v => new DateTimePoint(v.Date, v.Amount))
-                                   .ToArray(),
-                    Stroke = new SolidColorPaint(SKColors.LightBlue, 2),
-                    GeometrySize = 10
+                    Values = values,
+                    Stroke = new SolidColorPaint(new SKColor(199, 157, 255), 2),
+                    Fill = new SolidColorPaint(new SKColor(157, 119, 207, 55), 2),
+                    GeometrySize = 10,
+                    GeometryStroke = new SolidColorPaint(new SKColor(157, 119, 207), 2),
+                    GeometryFill = new SolidColorPaint(new SKColor(255, 255, 255))
                 }
             };
             UpdateCategories();
@@ -255,12 +283,10 @@ namespace Finace.ViewModels
         
         public void UpdateCategories()
         {
-            var period = AnyDateCheckBox ?
-                new Models.Period { startDate = DateFrom, endDate = DateTo }
-                : DatesHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
+            var period = CalculatePeriod();
 
-            var totalCostList = _service.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
-            var totalIncomeList = _service.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
+            var totalCostList = _statisticService.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
+            var totalIncomeList = _statisticService.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
 
             totalCostList.Add(new CategoryAmount { Category = "__СУММА__", Amount = totalCostList.Sum(v => v.Amount) });
             totalIncomeList.Add(new CategoryAmount { Category = "__СУММА__", Amount = totalIncomeList.Sum(v => v.Amount) });
@@ -268,18 +294,61 @@ namespace Finace.ViewModels
             TotalCostList = new ObservableCollection<CategoryAmount>(totalCostList.OrderByDescending(e => e.Amount).ToList());
             TotalIncomeList = new ObservableCollection<CategoryAmount>(totalIncomeList.OrderByDescending(e => e.Amount).ToList());
 
-            double daysBetween = period != null ? (period.endDate - period.startDate)!.Value.Days : 365; //тут разница между датой первой записи и текущей
+            var daysInPeriod = (int)Math.Round((period.endDate - period.startDate)!.Value.TotalDays);
 
-            AverageCostList = new ObservableCollection<CategoryAmount>(totalCostList.Select(e => new CategoryAmount {
-                Category = e.Category,
-                Amount = e.Amount / daysBetween * Convert.ToDouble(DaysForAverage)
-            }).OrderByDescending(e => e.Amount).ToList());
+            if (daysInPeriod == 0)
+                daysInPeriod = 1;
 
-            AverageIncomeList = new ObservableCollection<CategoryAmount>(totalIncomeList.Select(e => new CategoryAmount
+            double factor;
+
+            if (UnitAverage == "месяц")
             {
-                Category = e.Category,
-                Amount = e.Amount / daysBetween * Convert.ToDouble(DaysForAverage)
-            }).OrderByDescending(e => e.Amount).ToList());
+                double monthsBetween;
+
+                if (daysInPeriod == DateTime.DaysInMonth(period.startDate!.Value.Year, period.startDate.Value.Month))
+                    monthsBetween = 1;
+                else
+                    monthsBetween = daysInPeriod / 30.4375;
+                factor = Convert.ToDouble(DaysOrMonthsForAverage) / monthsBetween;
+            }
+            else
+            {
+                factor = Convert.ToDouble(DaysOrMonthsForAverage) / daysInPeriod;
+            }
+
+            AverageCostList = new ObservableCollection<CategoryAmount>(
+                totalCostList
+                    .Select(e => new CategoryAmount
+                    {
+                        Category = e.Category,
+                        Amount = e.Amount * factor
+                    })
+                    .OrderByDescending(e => e.Amount)
+                    .ToList()
+            );
+
+            AverageIncomeList = new ObservableCollection<CategoryAmount>(
+                totalIncomeList
+                    .Select(e => new CategoryAmount
+                    {
+                        Category = e.Category,
+                        Amount = e.Amount * factor
+                    })
+                    .OrderByDescending(e => e.Amount)
+                    .ToList()
+            );
+        }
+
+        private Period CalculatePeriod()
+        {
+            var period = AnyDateCheckBox ?
+                new Models.Period { startDate = DateFrom, endDate = DateTo }
+                : DatesHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
+
+            if (period == null)
+                period = new Period { startDate = _transactionService.FirstTransactionDate!.Value, endDate = DateTime.Now };
+
+            return period;
         }
 
         private void initDates()
@@ -299,7 +368,7 @@ namespace Finace.ViewModels
 
             var period = DatesHelper.GetCurrentMonth();
 
-            SelectedMonth = Months[period.startDate!.Value.Month - 1];
+            SelectedMonth = Months[period.startDate!.Value.Month];
             SelectedYear = period.startDate!.Value.Year;
             DateFrom = period.startDate;
             DateTo = period.endDate;

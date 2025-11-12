@@ -189,16 +189,14 @@ namespace Finace.ViewModels
             }
         }
 
-        private readonly ILogger<MainViewModel> _logger;
         private readonly Settings _config;
-        private readonly IStatisticService _service;
+        private readonly IStatisticService _statisticService;
         #endregion
 
-        public BudgetViewModel(ILogger<MainViewModel> logger, IOptions<Settings> configuration, IStatisticService service)
+        public BudgetViewModel(IOptions<Settings> configuration, IStatisticService statisticService)
         {
-            _logger = logger;
             _config = configuration.Value;
-            _service = service;
+            _statisticService = statisticService;
 
             initDates();
         }
@@ -207,10 +205,10 @@ namespace Finace.ViewModels
         {
             var period = DatesHelper.GetMonthPeriodByDateAndMonth(SelectedYear, SelectedMonth);
 
-            var necessarilyList = _service.BudgetNecessarilyForPeriod(period, IncludeTagsCheckBox);
-            var notNecessarilyList = _service.BudgetNotNecessarilyForPeriod(period, IncludeTagsCheckBox);
-            var totalCostList = _service.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
-            var totalIncomeList = _service.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
+            var necessarilyList = _statisticService.BudgetNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var notNecessarilyList = _statisticService.BudgetNotNecessarilyForPeriod(period, IncludeTagsCheckBox);
+            var totalCostList = _statisticService.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
+            var totalIncomeList = _statisticService.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
 
             var necessarilySum = (double)necessarilyList.Sum(e => e.Amount);
             var notNecessarilySum = (double)notNecessarilyList.Sum(e => e.Amount);

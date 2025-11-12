@@ -18,13 +18,19 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="15"
+                   Style="{StaticResource CustomTextStyle}"
+                   HorizontalAlignment="Left"
+                   FontSize="18">БЮДЖЕТ</TextBlock>
         <Border Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="3">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Margin="15">
+                        Margin="10">
                 <ComboBox Margin="0,0,30,0"
                           Width="140"
                           ItemsSource="{Binding Years}"
@@ -47,7 +53,7 @@
                           Content="Теги"
                           Checked="includeTags_Checked"
                           Unchecked="includeTags_Unchecked"
-                          Margin="20,0,0,0"/>
+                          Margin="10,0,0,0"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"

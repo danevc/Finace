@@ -4,7 +4,7 @@ namespace Finace.Service.Interfaces
 {
     public interface IStatisticService
     {
-        public List<DataPoint> BalanceForPeriod(Period? period);
+        public List<DataPoint> BalanceForPeriod(Period period);
 
         public List<CategoryAmount> BudgetNecessarilyForPeriod(Period? period, bool includeTags);
 

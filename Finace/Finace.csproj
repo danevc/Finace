@@ -21,10 +21,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Assets\icons\budget-icon.png" />
 		<None Remove="Assets\icons\BudgetButtonIcon.png" />
 		<None Remove="Assets\icons\close.png" />
 		<None Remove="Assets\icons\dashboard.png" />
 		<None Remove="Assets\icons\home.png" />
+		<None Remove="Assets\icons\money-flow.png" />
 		<None Remove="Assets\icons\plus.png" />
 		<None Remove="Assets\icons\rollup.png" />
 		<None Remove="Assets\icons\settings.png" />
@@ -32,22 +34,13 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\icons\BudgetButtonIcon.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\icons\close.png">
+    <Resource Include="Assets\icons\budget-icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\icons\dashboard.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\icons\home.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\icons\plus.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\icons\rollup.png">
+    <Resource Include="Assets\icons\money-flow.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\icons\settings.png">

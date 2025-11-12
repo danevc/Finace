@@ -1,5 +1,4 @@
 ﻿using Finace.Controls;
-using Finace.ViewModels;
 using Finace.Views;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,33 +13,22 @@ namespace Finace
     public partial class MainWindow : Window
     {
         private BudgetPage _budgetPage;
-        private SettingsPage _settingsPage;
         private DashboardPage _dashboardPage;
         private readonly MenuButton[] _navButtons;
 
-        public MainWindow(IMainViewModel viewModel,
-            BudgetPage budgetPage,
-            SettingsPage settingsPage,
-            DashboardPage dashboardPage)
+        public MainWindow(BudgetPage budgetPage, DashboardPage dashboardPage)
         {
             InitializeComponent();
 
             _budgetPage = budgetPage;
-            _settingsPage = settingsPage;
             _dashboardPage = dashboardPage;
-            _navButtons = [budgetPageButton, settingsButton, dashboardButton];
-
-            DataContext = viewModel;
+            _navButtons = [budgetPageButton, dashboardButton];
             SetFrame(_budgetPage, budgetPageButton);
         }
 
         private void BudgetPageClick(object sender, RoutedEventArgs e)
         {
             SetFrame(_budgetPage, budgetPageButton);
-        }
-        private void SettingsClick(object sender, RoutedEventArgs e)
-        {
-            SetFrame(_settingsPage, settingsButton);
         }
 
         private void DashboardClick(object sender, RoutedEventArgs e)
@@ -96,7 +84,6 @@ namespace Finace
             }
             else
             {
-                // enforce min width
                 double diff = this.Width - this.MinWidth;
                 this.Left += diff;
                 this.Width = this.MinWidth;
@@ -125,10 +112,8 @@ namespace Finace
             }
         }
 
-        // --- Corner thumbs ---
         private void ThumbTopLeft_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            // change Left/Top and Width/Height
             ThumbLeft_DragDelta(sender, e);
             ThumbTop_DragDelta(sender, e);
         }

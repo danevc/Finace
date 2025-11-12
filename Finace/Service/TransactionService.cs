@@ -1,12 +1,11 @@
 ﻿using Finace.Options;
+using Finace.Service.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.IO;
 
 namespace Finace.Service
 {
-    public interface ITransactionsService { public List<Models.Transaction>? Transactions { get; set; } public DateTime? FirstTransactionDate { get; set; } }
-
     public class TransactionService : ITransactionsService
     {
         public List<Models.Transaction>? Transactions { get; set; }

@@ -8,16 +8,16 @@
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
-      Title="DashboardPage">
-
-    <Grid Margin="10,0,10,15">
+      Title="DashboardPage"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <Grid Margin="10,0,10,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -25,12 +25,18 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="15"
+                   Style="{StaticResource CustomTextStyle}"
+                   HorizontalAlignment="Left"
+                   FontSize="18">СТАТИСТИКА</TextBlock>
         <Border Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="4">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
-                        Margin="0,10,20,10">
+                        Margin="10">
 
                 <StackPanel x:Name="YearMonthPick"
                             Orientation="Horizontal"
@@ -80,7 +86,8 @@
                           IsChecked="{Binding AnyDateCheckBox}"
                           Content="Произвольная дата"
                           Checked="AnyDate_Checked"
-                          Unchecked="AnyDate_Unchecked"></CheckBox>
+                          Unchecked="AnyDate_Unchecked"
+                          Margin="10,0,0,0"></CheckBox>
             </StackPanel>
         </Border>
         <TextBlock Grid.Row="1"
@@ -88,7 +95,7 @@
                    Grid.ColumnSpan="4"
                    Style="{StaticResource CustomTextStyle}"
                    FontSize="16"
-                   Margin="10,10,20,10">БАЛАНС ЗА ПЕРИОД</TextBlock>
+                   Margin="10,0,20,10">БАЛАНС ЗА ПЕРИОД</TextBlock>
         <Border Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
@@ -99,14 +106,14 @@
         </Border>
         <Border  Grid.Row="3"
                  Grid.Column="0"
-                 Grid.ColumnSpan="4">
+                 Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Cursor="">
+                        Margin="10,0,0,0">
                 <TextBlock Style="{StaticResource CustomTextStyle}"
                            FontSize="16"
-                           Margin="10,10,0,10">КАТЕГОРИИ</TextBlock>
+                           Margin="0,10,0,10">КАТЕГОРИИ</TextBlock>
                 <CheckBox x:Name="includeTags_TopCategories"
                           IsThreeState="False"
                           IsChecked="{Binding IncludeTagsCheckBox}"
@@ -114,50 +121,69 @@
                           Content="Теги"
                           Checked="includeTags_TopCategories_Checked"
                           Unchecked="includeTags_TopCategories_Unchecked" />
+            </StackPanel>
+        </Border>
+        <Border  Grid.Row="3"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0">
+
                 <TextBlock Style="{StaticResource CustomTextStyle}"
-                           FontSize="12">Среднее для</TextBlock>
-                <TextBox FontSize="12"
+                           FontSize="14">Среднее для</TextBlock>
+                <TextBox FontSize="14"
                          Width="55"
                          Height="35"
-                         Text="{Binding DaysForAverage, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding DaysOrMonthsForAverage, UpdateSourceTrigger=PropertyChanged}"
                          TextChanged="TextBox_DataContextChanged"
-                         Margin="5"/>
-                <TextBlock Style="{StaticResource CustomTextStyle}"
-                           FontSize="12">дней.</TextBlock>
+                         Margin="7,0,7,0" />
+                <ComboBox FontSize="12"
+                          Width="90"
+                          SelectedItem="{Binding UnitAverage, Mode=TwoWay}"
+                          SelectionChanged="Unit_Average_SelectionChanged">
+                    <sys:String>день</sys:String>
+                    <sys:String>месяц</sys:String>
+                </ComboBox>
             </StackPanel>
         </Border>
 
-        <ListBox Grid.Row="4"
+        <ListBox Grid.Row="5"
                  Grid.Column="0"
                  ItemsSource="{Binding TotalCostList}"
                  Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="4"
+        <ListBox Grid.Row="5"
                  Grid.Column="1"
-                 ItemsSource="{Binding AverageCostList}"
-                 Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="4"
-                 Grid.Column="2"
                  ItemsSource="{Binding TotalIncomeList}"
                  Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="4"
+        <ListBox Grid.Row="5"
+                 Grid.Column="2"
+                 ItemsSource="{Binding AverageCostList}"
+                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <ListBox Grid.Row="5"
                  Grid.Column="3"
                  ItemsSource="{Binding AverageIncomeList}"
                  Style="{StaticResource ExpenseListBoxStyle}" />
-        <TextBlock Grid.Row="5"
+        <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="12">Расход</TextBlock>
-        <TextBlock Grid.Row="5"
+                   FontSize="13"
+                   Margin="0,0,0,-6">Расход</TextBlock>
+        <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="12">Средний расход</TextBlock>
-        <TextBlock Grid.Row="5"
+                   FontSize="13"
+                   Margin="0,0,0,-6">Доход</TextBlock>
+        <TextBlock Grid.Row="4"
                    Grid.Column="2"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="12">Доход</TextBlock>
-        <TextBlock Grid.Row="5"
+                   FontSize="13"
+                   Margin="0,0,0,-6">Средний расход</TextBlock>
+        <TextBlock Grid.Row="4"
                    Grid.Column="3"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="12">Средний доход</TextBlock>
+                   FontSize="13"
+                   Margin="0,0,0,-6">Средний доход</TextBlock>
     </Grid>
 </Page>
