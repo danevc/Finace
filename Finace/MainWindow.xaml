@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:Finace.Controls"
         mc:Ignorable="d"
         Title="Finace"
-        Height="770"
+        Height="807"
         Width="1200"
         MinHeight="500"
         MinWidth="800"

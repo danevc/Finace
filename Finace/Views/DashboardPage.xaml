@@ -149,41 +149,126 @@
             </StackPanel>
         </Border>
 
-        <ListBox Grid.Row="5"
-                 Grid.Column="0"
-                 ItemsSource="{Binding TotalCostList}"
-                 Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="5"
-                 Grid.Column="1"
-                 ItemsSource="{Binding TotalIncomeList}"
-                 Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="5"
-                 Grid.Column="2"
-                 ItemsSource="{Binding AverageCostList}"
-                 Style="{StaticResource ExpenseListBoxStyle}" />
-        <ListBox Grid.Row="5"
-                 Grid.Column="3"
-                 ItemsSource="{Binding AverageIncomeList}"
-                 Style="{StaticResource ExpenseListBoxStyle}" />
+        <Border Grid.Row="5"
+                Grid.Column="0"
+                Background="#37342D"
+                CornerRadius="12"
+                Padding="2,5,2,5"
+                Margin="5,10,10,5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding TotalCostList}"
+                              ItemTemplate="{StaticResource ParentTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="5"
+                Grid.Column="1"
+                Background="#37342D"
+                CornerRadius="12"
+                Padding="2,5,2,5"
+                Margin="5,10,10,5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding TotalIncomeList}"
+                              ItemTemplate="{StaticResource ParentTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="5"
+                Grid.Column="2"
+                Background="#37342D"
+                CornerRadius="12"
+                Padding="2,5,2,5"
+                Margin="5,10,10,5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding AverageCostList}"
+                              ItemTemplate="{StaticResource ParentTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="5"
+                Grid.Column="3"
+                Background="#37342D"
+                CornerRadius="12"
+                Padding="2,5,2,5"
+                Margin="5,10,10,5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding AverageIncomeList}"
+                              ItemTemplate="{StaticResource ParentTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="13"
-                   Margin="0,0,0,-6">Расход</TextBlock>
+                   FontSize="12"
+                   Margin="14,0,0,-6"
+                   HorizontalAlignment="Left">Расход</TextBlock>
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="13"
-                   Margin="0,0,0,-6">Доход</TextBlock>
+                   FontSize="12"
+                   Margin="14,0,0,-6"
+                   HorizontalAlignment="Left">Доход</TextBlock>
         <TextBlock Grid.Row="4"
                    Grid.Column="2"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="13"
-                   Margin="0,0,0,-6">Средний расход</TextBlock>
+                   FontSize="12"
+                   Margin="14,0,0,-6"
+                   HorizontalAlignment="Left">Средний расход</TextBlock>
         <TextBlock Grid.Row="4"
                    Grid.Column="3"
                    Style="{StaticResource CustomTextStyle}"
-                   FontSize="13"
-                   Margin="0,0,0,-6">Средний доход</TextBlock>
+                   FontSize="12"
+                   Margin="14,0,0,-6"
+                   HorizontalAlignment="Left">Средний доход</TextBlock>
+
+        <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12"
+                   Margin="0,0,20,-6"
+                   HorizontalAlignment="Right"
+                   Text="{Binding TotalCost, StringFormat=N0, ConverterCulture=ru-RU}" />
+        <TextBlock Grid.Row="4"
+                   Grid.Column="1"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12"
+                   Margin="0,0,20,-6"
+                   HorizontalAlignment="Right"
+                   Text="{Binding TotalIncome, StringFormat=N0, ConverterCulture=ru-RU}" />
+        <TextBlock Grid.Row="4"
+                   Grid.Column="2"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12"
+                   Margin="0,0,20,-6"
+                   HorizontalAlignment="Right"
+                   Text="{Binding AverageCost, StringFormat=N0, ConverterCulture=ru-RU}" />
+        <TextBlock Grid.Row="4"
+                   Grid.Column="3"
+                   Style="{StaticResource CustomTextStyle}"
+                   FontSize="12"
+                   Margin="0,0,20,-6"
+                   HorizontalAlignment="Right"
+                   Text="{Binding AverageIncome, StringFormat=N0, ConverterCulture=ru-RU}" />
     </Grid>
 </Page>

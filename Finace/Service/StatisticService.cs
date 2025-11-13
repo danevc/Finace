@@ -5,24 +5,107 @@ using Microsoft.Extensions.Options;
 
 namespace Finace.Service
 {
-    public class DataPoint
-    {
-        public DateTime Date { get; set; }
-
-        public double Amount { get; set; }
-    }
-
     public class StatisticService : IStatisticService
     {
         private List<Transaction>? _allTransactions;
         private Settings _settings;
-        ITransactionsService _transactionService;
 
         public StatisticService(ITransactionsService transactionService, IOptions<Settings> configuration)
         {
             _settings = configuration.Value;
             _allTransactions = transactionService.Transactions;
-            _transactionService = transactionService;
+        }
+
+        public List<CategoryAmount> BudgetNecessarilyForPeriod(Period? period, bool includeTags)
+        {
+            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+
+            var transactionsNecessarily = _allTransactions
+                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
+                .Where(r => r.TransferAmount == null)
+                .Where(r => r.Amount < 0)
+                .Where(r => r.Note != "Корректировка остатка")
+                .Where(r => _settings.CategoriesNecessarily?.Contains(r.Category ?? "") ?? false);
+
+            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+
+            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
+
+            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
+            {
+                ParentCategory = e.First().ParentCategory,
+                Category = e.Key ?? string.Empty,
+                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
+            }).ToList();
+        }
+
+        public List<CategoryAmount> BudgetNotNecessarilyForPeriod(Period? period, bool includeTags)
+        {
+            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+
+            var transactionsNecessarily = _allTransactions
+                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
+                .Where(r => r.TransferAmount == null)
+                .Where(r => r.Amount < 0)
+                .Where(r => r.Note != "Корректировка остатка")
+                .Where(r => !(_settings.CategoriesNecessarily?.Contains(r.Category ?? "") ?? false));
+
+            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+
+            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
+
+            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
+            {
+                ParentCategory = e.First().ParentCategory,
+                Category = e.Key ?? string.Empty,
+                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
+            }).ToList();
+        }
+
+        public List<CategoryAmount> CategoryExpensesForPeriod(Period? period, bool includeTags, int take = int.MaxValue)
+        {
+            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+
+            var transactionsNecessarily = _allTransactions
+                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
+                .Where(r => r.TransferAmount == null)
+                .Where(r => r.Amount < 0)
+                .Where(r => r.Note != "Корректировка остатка");
+
+            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+
+            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
+
+            var result = transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
+            {
+                ParentCategory = e.First().ParentCategory,
+                Category = e.Key ?? string.Empty,
+                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
+            }).OrderByDescending(e => e.Amount).Take(take).ToList();
+
+            return result;
+        }
+
+        public List<CategoryAmount> CategoryIncomeForPeriod(Period? period, bool includeTags)
+        {
+            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+
+            var transactionsNecessarily = _allTransactions
+                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
+                .Where(r => r.TransferAmount == null)
+                .Where(r => r.Amount > 0)
+                .Where(r => r.Note != "Корректировка остатка");
+
+            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+
+            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
+
+            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
+            {
+                ParentCategory = e.First().ParentCategory,
+                Category = e.Key ?? string.Empty,
+                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
+            }).ToList();
         }
 
         public List<DataPoint> BalanceForPeriod(Period period)
@@ -66,98 +149,10 @@ namespace Finace.Service
                 }
             }
 
-            if (lastAddedDate != period.endDate.Value) 
+            if (lastAddedDate != period.endDate.Value)
                 result.Add(new DataPoint { Date = period.endDate!.Value, Amount = (double)balance });
-            
-            return result;
-        }
-
-        public List<CategoryAmount> BudgetNecessarilyForPeriod(Period? period, bool includeTags)
-        {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
-
-            var transactionsNecessarily = _allTransactions
-                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
-                .Where(r => r.TransferAmount == null)
-                .Where(r => r.Amount < 0)
-                .Where(r => r.Note != "Корректировка остатка")
-                .Where(r => _settings.CategoriesNecessarily?.Contains(r.Category ?? "") ?? false);
-
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
-
-            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
-
-            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
-            {
-                Category = e.Key ?? string.Empty,
-                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
-            }).ToList();
-        }
-
-        public List<CategoryAmount> BudgetNotNecessarilyForPeriod(Period? period, bool includeTags)
-        {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
-
-            var transactionsNecessarily = _allTransactions
-                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
-                .Where(r => r.TransferAmount == null)
-                .Where(r => r.Amount < 0)
-                .Where(r => r.Note != "Корректировка остатка")
-                .Where(r => !(_settings.CategoriesNecessarily?.Contains(r.Category ?? "") ?? false));
-
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
-
-            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
-
-            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
-            {
-                Category = e.Key ?? string.Empty,
-                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
-            }).ToList();
-        }
-
-        public List<CategoryAmount> CategoryExpensesForPeriod(Period? period, bool includeTags, int take = int.MaxValue)
-        {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
-
-            var transactionsNecessarily = _allTransactions
-                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
-                .Where(r => r.TransferAmount == null)
-                .Where(r => r.Amount < 0)
-                .Where(r => r.Note != "Корректировка остатка");
-
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
-
-            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
-
-            var result = transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
-                {
-                    Category = e.Key ?? string.Empty,
-                    Amount = (double)Math.Abs(e.Sum(x => x.Amount))
-                }).OrderByDescending(e => e.Amount).Take(take).ToList();
 
             return result;
-        }
-
-        public List<CategoryAmount> CategoryIncomeForPeriod(Period? period, bool includeTags)
-        {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
-
-            var transactionsNecessarily = _allTransactions
-                .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
-                .Where(r => r.TransferAmount == null)
-                .Where(r => r.Amount > 0)
-                .Where(r => r.Note != "Корректировка остатка");
-
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
-
-            if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
-
-            return transactionsNecessarily.GroupBy(r => r.Category).Select(e => new CategoryAmount
-            {
-                Category = e.Key ?? string.Empty,
-                Amount = (double)Math.Abs(e.Sum(x => x.Amount))
-            }).ToList();
         }
     }
 }
