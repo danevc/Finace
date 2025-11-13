@@ -17,15 +17,26 @@ namespace Finace.ViewModels
         }
 
         // Сумма всех подкатегорий
-        public double Total => Subcategories.Sum(s => s.Total);
+        public double Total { get; set; } 
 
         public ICommand ToggleExpandCommand { get; }
 
         public ParentCategoryViewModel(string parent, IEnumerable<SubCategoryViewModel> subs)
         {
+            if (subs.Count() == 1 && subs.First().SubCategory == parent)
+            {
+                Subcategories = new ObservableCollection<SubCategoryViewModel>();
+                Total = subs.First().Total;
+            }
+            else
+            {
+                Subcategories = new ObservableCollection<SubCategoryViewModel>(subs.OrderByDescending(e => e.Total));
+                Total = Subcategories.Sum(s => s.Total);
+            }
+
             ParentCategory = parent;
-            Subcategories = new ObservableCollection<SubCategoryViewModel>(subs.OrderByDescending(e => e.Total));
             ToggleExpandCommand = new RelayCommand(() => IsExpanded = !IsExpanded);
+
         }
     }
 }

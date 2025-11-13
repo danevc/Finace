@@ -35,6 +35,66 @@ namespace Finace.ViewModels
             set { _unitAverage = value; OnPropertyChanged(); }
         }
 
+        private double _totalCost;
+        public double TotalCost
+        {
+            get => _totalCost;
+            set
+            {
+                if (_totalCost != value)
+                {
+                    _totalCost = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalCost));
+                }
+            }
+        }
+
+        private double _totalIncome;
+        public double TotalIncome
+        {
+            get => _totalIncome;
+            set
+            {
+                if (_totalIncome != value)
+                {
+                    _totalIncome = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalIncome));
+                }
+            }
+        }
+
+        private double _averageCost;
+        public double AverageCost
+        {
+            get => _averageCost;
+            set
+            {
+                if (_averageCost != value)
+                {
+                    _averageCost = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AverageCost));
+                }
+            }
+        }
+
+        private double _averageIncome;
+        public double AverageIncome
+        {
+            get => _averageIncome;
+            set
+            {
+                if (_averageIncome != value)
+                {
+                    _averageIncome = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AverageIncome));
+                }
+            }
+        }
+
         private string _daysOrMonthsForAverage;
         public string DaysOrMonthsForAverage
         {
@@ -65,8 +125,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _totalCostList;
-        public ObservableCollection<CategoryAmount> TotalCostList
+        private ObservableCollection<ParentCategoryViewModel> _totalCostList;
+        public ObservableCollection<ParentCategoryViewModel> TotalCostList
         {
             get { return _totalCostList; }
             set
@@ -76,8 +136,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _averageCostList;
-        public ObservableCollection<CategoryAmount> AverageCostList
+        private ObservableCollection<ParentCategoryViewModel> _averageCostList;
+        public ObservableCollection<ParentCategoryViewModel> AverageCostList
         {
             get { return _averageCostList; }
             set
@@ -87,8 +147,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _totalIncomeList;
-        public ObservableCollection<CategoryAmount> TotalIncomeList
+        private ObservableCollection<ParentCategoryViewModel> _totalIncomeList;
+        public ObservableCollection<ParentCategoryViewModel> TotalIncomeList
         {
             get { return _totalIncomeList; }
             set
@@ -98,8 +158,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _necessarilyList;
-        public ObservableCollection<CategoryAmount> AverageIncomeList
+        private ObservableCollection<ParentCategoryViewModel> _necessarilyList;
+        public ObservableCollection<ParentCategoryViewModel> AverageIncomeList
         {
             get { return _necessarilyList; }
             set
@@ -288,11 +348,22 @@ namespace Finace.ViewModels
             var totalCostList = _statisticService.CategoryExpensesForPeriod(period, IncludeTagsCheckBox);
             var totalIncomeList = _statisticService.CategoryIncomeForPeriod(period, IncludeTagsCheckBox);
 
-            totalCostList.Add(new CategoryAmount { Category = "__СУММА__", Amount = totalCostList.Sum(v => v.Amount) });
-            totalIncomeList.Add(new CategoryAmount { Category = "__СУММА__", Amount = totalIncomeList.Sum(v => v.Amount) });
+            TotalCost = totalCostList.Sum(v => v.Amount);
+            TotalIncome = totalIncomeList.Sum(v => v.Amount);
 
-            TotalCostList = new ObservableCollection<CategoryAmount>(totalCostList.OrderByDescending(e => e.Amount).ToList());
-            TotalIncomeList = new ObservableCollection<CategoryAmount>(totalIncomeList.OrderByDescending(e => e.Amount).ToList());
+            TotalCostList = new ObservableCollection<ParentCategoryViewModel>(totalCostList
+                .GroupBy(x => x.ParentCategory)
+                .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList());
+
+            TotalIncomeList = new ObservableCollection<ParentCategoryViewModel>(totalIncomeList
+                .GroupBy(x => x.ParentCategory)
+                .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList());
 
             var daysInPeriod = (int)Math.Round((period.endDate - period.startDate)!.Value.TotalDays);
 
@@ -316,26 +387,37 @@ namespace Finace.ViewModels
                 factor = Convert.ToDouble(DaysOrMonthsForAverage) / daysInPeriod;
             }
 
-            AverageCostList = new ObservableCollection<CategoryAmount>(
+            AverageCost = TotalCost * factor;
+            AverageIncome = TotalIncome * factor;
+
+            AverageCostList = new ObservableCollection<ParentCategoryViewModel>(
                 totalCostList
                     .Select(e => new CategoryAmount
                     {
+                        ParentCategory = e.ParentCategory,
                         Category = e.Category,
                         Amount = e.Amount * factor
                     })
-                    .OrderByDescending(e => e.Amount)
-                    .ToList()
+                    .GroupBy(x => x.ParentCategory)
+                    .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList()
             );
 
-            AverageIncomeList = new ObservableCollection<CategoryAmount>(
+            AverageIncomeList = new ObservableCollection<ParentCategoryViewModel>(
                 totalIncomeList
                     .Select(e => new CategoryAmount
                     {
+                        ParentCategory = e.ParentCategory,
                         Category = e.Category,
                         Amount = e.Amount * factor
                     })
-                    .OrderByDescending(e => e.Amount)
-                    .ToList()
+                    .GroupBy(x => x.ParentCategory)
+                    .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList()
             );
         }
 
