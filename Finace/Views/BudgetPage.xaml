@@ -35,7 +35,7 @@
                           Width="140"
                           ItemsSource="{Binding Years}"
                           SelectedItem="{Binding SelectedYear}"
-                          SelectionChanged="YearMonth_SelectionChanged"/>
+                          SelectionChanged="YearMonth_SelectionChanged" />
                 <ComboBox Width="140"
                           ItemsSource="{Binding Months}"
                           SelectedItem="{Binding SelectedMonth}"
@@ -53,7 +53,7 @@
                           Content="Теги"
                           Checked="includeTags_Checked"
                           Unchecked="includeTags_Unchecked"
-                          Margin="10,0,0,0"/>
+                          Margin="10,0,0,0" />
             </StackPanel>
         </Border>
         <Border Grid.Row="1"
@@ -96,9 +96,22 @@
                                    Style="{StaticResource CustomTextStyle}" />
                     </Grid>
                 </Border>
-                <ListBox Grid.Row="2"
-                         ItemsSource="{Binding NecessarilyList}"
-                         Style="{StaticResource ExpenseListBoxStyle}" />
+                <Border Background="#37342D"
+                        CornerRadius="12"
+                        Padding="4"
+                        Grid.Row="2"
+                        Margin="5,10,10,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding NecessarilyList}"
+                                      ItemTemplate="{StaticResource ParentTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
             </Grid>
         </Border>
         <Border Grid.Row="1"
@@ -141,9 +154,22 @@
                                    Style="{StaticResource CustomTextStyle}" />
                     </Grid>
                 </Border>
-                <ListBox Grid.Row="2"
-                         ItemsSource="{Binding NotNecessarilyList}"
-                         Style="{StaticResource ExpenseListBoxStyle}" />
+                <Border Background="#37342D"
+                        CornerRadius="12"
+                        Padding="4"
+                        Grid.Row="2"
+                        Margin="5,10,10,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding NotNecessarilyList}"
+                                      ItemTemplate="{StaticResource ParentTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
             </Grid>
         </Border>
         <Border Grid.Row="1"
@@ -186,9 +212,22 @@
                                    Style="{StaticResource CustomTextStyle}" />
                     </Grid>
                 </Border>
-                <ListBox Grid.Row="2"
-                         ItemsSource="{Binding TotalCostList}"
-                         Style="{StaticResource ExpenseListBoxStyle}" />
+                <Border Background="#37342D"
+                        CornerRadius="12"
+                        Padding="4"
+                        Grid.Row="2"
+                        Margin="5,10,5,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding TotalCostList}"
+                                      ItemTemplate="{StaticResource ParentTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
             </Grid>
         </Border>
     </Grid>

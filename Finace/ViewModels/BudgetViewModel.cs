@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Finace.ViewModels
 {
@@ -25,6 +26,7 @@ namespace Finace.ViewModels
         }
 
         #region Property
+
         private bool _includeTagsCheckBox;
         public bool IncludeTagsCheckBox
         {
@@ -42,8 +44,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _notNecessarilyList;
-        public ObservableCollection<CategoryAmount> NotNecessarilyList
+        private ObservableCollection<ParentCategoryViewModel> _notNecessarilyList;
+        public ObservableCollection<ParentCategoryViewModel> NotNecessarilyList
         {
             get { return _notNecessarilyList; }
             set
@@ -53,8 +55,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _necessarilyList;
-        public ObservableCollection<CategoryAmount> NecessarilyList
+        private ObservableCollection<ParentCategoryViewModel> _necessarilyList;
+        public ObservableCollection<ParentCategoryViewModel> NecessarilyList
         {
             get { return _necessarilyList; }
             set
@@ -64,8 +66,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private ObservableCollection<CategoryAmount> _totalCostList;
-        public ObservableCollection<CategoryAmount> TotalCostList
+        private ObservableCollection<ParentCategoryViewModel> _totalCostList;
+        public ObservableCollection<ParentCategoryViewModel> TotalCostList
         {
             get { return _totalCostList; }
             set
@@ -228,9 +230,27 @@ namespace Finace.ViewModels
             NotNecessarilyProgressBarText = $"{notNecessarilySum:N0} / {_config.TotalBudgetNotNecessarily:N0} ({notNecessarilyPrecentage:P1})";
             TotalCostToTotalIncomeProgressBarText = $"{totalCostSum:N0} / {totalIncomeSum:N0} ({totalPrecentage:P1})";
 
-            NecessarilyList = new ObservableCollection<CategoryAmount>(necessarilyList.OrderByDescending(e => e.Amount).ToList());
-            NotNecessarilyList = new ObservableCollection<CategoryAmount>(notNecessarilyList.OrderByDescending(e => e.Amount).ToList());
-            TotalCostList = new ObservableCollection<CategoryAmount>(totalCostList.OrderByDescending(e => e.Amount).ToList());
+            NecessarilyList = new ObservableCollection<ParentCategoryViewModel>(necessarilyList
+                .GroupBy(x => x.ParentCategory)
+                .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList());
+
+            NotNecessarilyList = new ObservableCollection<ParentCategoryViewModel>(notNecessarilyList
+                .GroupBy(x => x.ParentCategory)
+                .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList());
+
+            TotalCostList = new ObservableCollection<ParentCategoryViewModel>(totalCostList
+                .GroupBy(x => x.ParentCategory)
+                .Select(g => new ParentCategoryViewModel(
+                    g.Key ?? "(No parent)",
+                    g.Select(s => new SubCategoryViewModel(s.Category ?? "(No sub)", s.Amount))
+                )).OrderByDescending(e => e.Total).ToList());
+
         }
 
         private void initDates()
