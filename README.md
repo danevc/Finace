@@ -1,8 +1,9 @@
 # Finace
 Desktop WPF приложение для отображения статистики из приложения Money Flow
 
-<img width="1197" height="769" alt="image" src="https://github.com/user-attachments/assets/2b0a1c18-b1f8-4b42-924f-51b20e4eff03" />
-<img width="1198" height="769" alt="image" src="https://github.com/user-attachments/assets/de8430e7-7920-40d1-9c70-abf869bb5388" />
+<img width="930" height="497" alt="image" src="https://github.com/user-attachments/assets/7b26c25b-2600-44bf-a376-b32eb0f72098" />
+<img width="1198" height="808" alt="image" src="https://github.com/user-attachments/assets/d658791b-cd5b-4c9a-88c4-62fb7c9c0dc9" />
+
 
 ### Описание настроек:
 Настраивается приложение в appsettings
