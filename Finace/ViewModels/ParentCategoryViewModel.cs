@@ -17,7 +17,7 @@ namespace Finace.ViewModels
         }
 
         // Сумма всех подкатегорий
-        public double Total { get; set; } 
+        public double Total { get; set; }
 
         public ICommand ToggleExpandCommand { get; }
 

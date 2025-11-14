@@ -49,7 +49,7 @@ namespace Finace
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove(); 
+                this.DragMove();
         }
 
         private void SetFrame(Page page, MenuButton activeButton)
@@ -59,7 +59,7 @@ namespace Finace
 
             foreach (var btn in _navButtons)
             {
-                if(btn != activeButton) btn.IsActive = false;
+                if (btn != activeButton) btn.IsActive = false;
             }
         }
 

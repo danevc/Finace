@@ -8,7 +8,6 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace Finace.ViewModels
@@ -33,7 +32,7 @@ namespace Finace.ViewModels
         public string? UnitAverage
         {
             get => _unitAverage;
-            set 
+            set
             {
                 if (_unitAverage != value)
                 {
@@ -200,7 +199,7 @@ namespace Finace.ViewModels
             }
         }
 
-        private Func<double, string> _dateFormatter = v => new DateTime((long) v).ToString("dd MMM");
+        private Func<double, string> _dateFormatter = v => new DateTime((long)v).ToString("dd MMM");
         public Func<double, string> DateFormatter
         {
             get => _dateFormatter;
@@ -354,7 +353,7 @@ namespace Finace.ViewModels
             ];
             UpdateCategories();
         }
-        
+
         public void UpdateCategories()
         {
             var period = CalculatePeriod();

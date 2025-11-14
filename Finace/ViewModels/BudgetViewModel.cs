@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Finace.ViewModels
 {
-    public interface IBudgetViewModel 
+    public interface IBudgetViewModel
     {
         public void UpdatePage();
     }
@@ -23,7 +23,6 @@ namespace Finace.ViewModels
         }
 
         #region Properties
-
         private bool _includeTagsCheckBox;
         public bool IncludeTagsCheckBox
         {
@@ -226,7 +225,7 @@ namespace Finace.ViewModels
             var totalIncomeSum = (double)totalIncomeList.Sum(e => e.Amount);
 
             var necessarilyPrecentage = (double)(necessarilySum / _config.TotalBudgetNecessarily ?? 0);
-            var notNecessarilyPrecentage = (double)(notNecessarilySum / _config.TotalBudgetNotNecessarily  ?? 0);
+            var notNecessarilyPrecentage = (double)(notNecessarilySum / _config.TotalBudgetNotNecessarily ?? 0);
             var totalPrecentage = (double)(totalCostSum / totalIncomeSum);
 
             NecessarilyPercentage = necessarilyPrecentage * 100;
