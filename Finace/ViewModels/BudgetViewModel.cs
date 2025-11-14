@@ -15,14 +15,14 @@ namespace Finace.ViewModels
 
     public class BudgetViewModel : IBudgetViewModel, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #region Property
+        #region Properties
 
         private bool _includeTagsCheckBox;
         public bool IncludeTagsCheckBox
@@ -34,65 +34,71 @@ namespace Finace.ViewModels
                 {
                     _includeTagsCheckBox = value;
                     OnPropertyChanged();
-
-                    // Если нужно обновить зависимые свойства
-                    OnPropertyChanged(nameof(IncludeTagsCheckBox));
                 }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _notNecessarilyList;
-        public ObservableCollection<ParentCategoryViewModel> NotNecessarilyList
+        private ObservableCollection<ParentCategoryViewModel>? _notNecessarilyList;
+        public ObservableCollection<ParentCategoryViewModel>? NotNecessarilyList
         {
             get { return _notNecessarilyList; }
             set
             {
-                _notNecessarilyList = value;
-                OnPropertyChanged(nameof(NotNecessarilyList));
+                if (_notNecessarilyList != value)
+                {
+                    _notNecessarilyList = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _necessarilyList;
-        public ObservableCollection<ParentCategoryViewModel> NecessarilyList
+        private ObservableCollection<ParentCategoryViewModel>? _necessarilyList;
+        public ObservableCollection<ParentCategoryViewModel>? NecessarilyList
         {
             get { return _necessarilyList; }
             set
             {
-                _necessarilyList = value;
-                OnPropertyChanged(nameof(NecessarilyList));
+                if (_necessarilyList != value)
+                {
+                    _necessarilyList = value;
+                    OnPropertyChanged(nameof(NecessarilyList));
+                }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _totalCostList;
-        public ObservableCollection<ParentCategoryViewModel> TotalCostList
+        private ObservableCollection<ParentCategoryViewModel>? _totalCostList;
+        public ObservableCollection<ParentCategoryViewModel>? TotalCostList
         {
             get { return _totalCostList; }
             set
             {
-                _totalCostList = value;
-                OnPropertyChanged(nameof(TotalCostList));
+                if (_totalCostList != value)
+                {
+                    _totalCostList = value;
+                    OnPropertyChanged(nameof(TotalCostList));
+                }
             }
         }
 
-        private double _notNecessarilyPercentage;
-        public double NotNecessarilyPercentage
+        private double? _notNecessarilyPercentage;
+        public double? NotNecessarilyPercentage
         {
             get => _notNecessarilyPercentage;
             set
             {
                 if (_notNecessarilyPercentage != value)
                 {
-                    _notNecessarilyPercentage = value;
-                    OnPropertyChanged();
-
-                    // Если нужно обновить зависимые свойства
-                    OnPropertyChanged(nameof(NotNecessarilyProgressBarText));
+                    if (_notNecessarilyPercentage != value)
+                    {
+                        _notNecessarilyPercentage = value;
+                        OnPropertyChanged();
+                    }
                 }
             }
         }
 
-        private double _necessarilyPercentage;
-        public double NecessarilyPercentage
+        private double? _necessarilyPercentage;
+        public double? NecessarilyPercentage
         {
             get => _necessarilyPercentage;
             set
@@ -101,13 +107,12 @@ namespace Finace.ViewModels
                 {
                     _necessarilyPercentage = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(NecessarilyProgressBarText));
                 }
             }
         }
 
-        private double _totalCostToTotalIncomePercentage;
-        public double TotalCostToTotalIncomePercentage
+        private double? _totalCostToTotalIncomePercentage;
+        public double? TotalCostToTotalIncomePercentage
         {
             get => _totalCostToTotalIncomePercentage;
             set
@@ -116,13 +121,12 @@ namespace Finace.ViewModels
                 {
                     _totalCostToTotalIncomePercentage = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalCostToTotalIncomeProgressBarText));
                 }
             }
         }
 
-        private string _necessarilyProgressBarText;
-        public string NecessarilyProgressBarText
+        private string? _necessarilyProgressBarText;
+        public string? NecessarilyProgressBarText
         {
             get => _necessarilyProgressBarText;
             set
@@ -135,8 +139,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private string _notNecessarilyProgressBarText;
-        public string NotNecessarilyProgressBarText
+        private string? _notNecessarilyProgressBarText;
+        public string? NotNecessarilyProgressBarText
         {
             get => _notNecessarilyProgressBarText;
             set
@@ -149,8 +153,8 @@ namespace Finace.ViewModels
             }
         }
 
-        private string _totalCostToTotalIncomeProgressBarText;
-        public string TotalCostToTotalIncomeProgressBarText
+        private string? _totalCostToTotalIncomeProgressBarText;
+        public string? TotalCostToTotalIncomeProgressBarText
         {
             get => _totalCostToTotalIncomeProgressBarText;
             set
@@ -163,8 +167,8 @@ namespace Finace.ViewModels
             }
         }
 
-        public ObservableCollection<int> Months { get; set; }
-        public ObservableCollection<int> Years { get; set; }
+        public ObservableCollection<int>? Months { get; set; }
+        public ObservableCollection<int>? Years { get; set; }
 
         private int? _selectedYear;
         public int? SelectedYear
@@ -172,8 +176,11 @@ namespace Finace.ViewModels
             get => _selectedYear;
             set
             {
-                _selectedYear = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYear)));
+                if (_selectedYear != value)
+                {
+                    _selectedYear = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -183,8 +190,11 @@ namespace Finace.ViewModels
             get => _selectedMonth;
             set
             {
-                _selectedMonth = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedMonth)));
+                if (_selectedMonth != value)
+                {
+                    _selectedMonth = value;
+                    OnPropertyChanged();
+                }
             }
         }
 

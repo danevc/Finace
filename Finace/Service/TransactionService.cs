@@ -21,6 +21,9 @@ namespace Finace.Service
 
         private void FillTransactionsFromCSV()
         {
+            if(_settings?.Folder == null) 
+                return;
+
             string? filePath = Directory.GetFiles(_settings.Folder, "*.csv")
                 .Where(f => Path.GetFileName(f).Contains("Money_Flow"))
                 .OrderByDescending(f => File.GetCreationTime(f))
@@ -44,9 +47,9 @@ namespace Finace.Service
                     DateTime parsedDate = DateTime.MinValue;
                     int id = 0;
 
-                    int.TryParse(parts.ElementAtOrDefault(0), out id);
-                    DateTime.TryParse(parts.ElementAtOrDefault(1), out parsedDate);
-                    decimal.TryParse(parts.ElementAtOrDefault(3), NumberStyles.Any, CultureInfo.InvariantCulture, out parsedAmount);
+                    _ = int.TryParse(parts.ElementAtOrDefault(0), out id);
+                    _ = DateTime.TryParse(parts.ElementAtOrDefault(1), out parsedDate);
+                    _ = decimal.TryParse(parts.ElementAtOrDefault(3), NumberStyles.Any, CultureInfo.InvariantCulture, out parsedAmount);
 
                     var transferAmountStr = parts.ElementAtOrDefault(10);
                     if (!string.IsNullOrWhiteSpace(transferAmountStr))

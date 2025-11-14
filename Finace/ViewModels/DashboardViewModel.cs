@@ -8,6 +8,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace Finace.ViewModels
@@ -20,23 +21,30 @@ namespace Finace.ViewModels
 
     public class DashboardViewModel : IDashboardViewModel, INotifyPropertyChanged
     {
-        #region Property
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Properties
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string _unitAverage = "день";
-        public string UnitAverage
+        private string? _unitAverage;
+        public string? UnitAverage
         {
             get => _unitAverage;
-            set { _unitAverage = value; OnPropertyChanged(); }
+            set 
+            {
+                if (_unitAverage != value)
+                {
+                    _unitAverage = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
-        private double _totalCost;
-        public double TotalCost
+        private double? _totalCost;
+        public double? TotalCost
         {
             get => _totalCost;
             set
@@ -45,13 +53,12 @@ namespace Finace.ViewModels
                 {
                     _totalCost = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalCost));
                 }
             }
         }
 
-        private double _totalIncome;
-        public double TotalIncome
+        private double? _totalIncome;
+        public double? TotalIncome
         {
             get => _totalIncome;
             set
@@ -60,13 +67,12 @@ namespace Finace.ViewModels
                 {
                     _totalIncome = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalIncome));
                 }
             }
         }
 
-        private double _averageCost;
-        public double AverageCost
+        private double? _averageCost;
+        public double? AverageCost
         {
             get => _averageCost;
             set
@@ -75,13 +81,12 @@ namespace Finace.ViewModels
                 {
                     _averageCost = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(AverageCost));
                 }
             }
         }
 
-        private double _averageIncome;
-        public double AverageIncome
+        private double? _averageIncome;
+        public double? AverageIncome
         {
             get => _averageIncome;
             set
@@ -90,13 +95,12 @@ namespace Finace.ViewModels
                 {
                     _averageIncome = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(AverageIncome));
                 }
             }
         }
 
-        private string _daysOrMonthsForAverage;
-        public string DaysOrMonthsForAverage
+        private string? _daysOrMonthsForAverage;
+        public string? DaysOrMonthsForAverage
         {
             get => _daysOrMonthsForAverage;
             set
@@ -105,7 +109,6 @@ namespace Finace.ViewModels
                 {
                     _daysOrMonthsForAverage = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(DaysOrMonthsForAverage));
                 }
             }
         }
@@ -120,71 +123,84 @@ namespace Finace.ViewModels
                 {
                     _includeTagsCheckBox = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(IncludeTagsCheckBox));
                 }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _totalCostList;
-        public ObservableCollection<ParentCategoryViewModel> TotalCostList
+        private ObservableCollection<ParentCategoryViewModel>? _totalCostList;
+        public ObservableCollection<ParentCategoryViewModel>? TotalCostList
         {
             get { return _totalCostList; }
             set
             {
-                _totalCostList = value;
-                OnPropertyChanged(nameof(TotalCostList));
+                if (_totalCostList != value)
+                {
+                    _totalCostList = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _averageCostList;
-        public ObservableCollection<ParentCategoryViewModel> AverageCostList
+        private ObservableCollection<ParentCategoryViewModel>? _averageCostList;
+        public ObservableCollection<ParentCategoryViewModel>? AverageCostList
         {
             get { return _averageCostList; }
             set
             {
-                _averageCostList = value;
-                OnPropertyChanged(nameof(AverageCostList));
+                if (_averageCostList != value)
+                {
+                    _averageCostList = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _totalIncomeList;
-        public ObservableCollection<ParentCategoryViewModel> TotalIncomeList
+        private ObservableCollection<ParentCategoryViewModel>? _totalIncomeList;
+        public ObservableCollection<ParentCategoryViewModel>? TotalIncomeList
         {
             get { return _totalIncomeList; }
             set
             {
-                _totalIncomeList = value;
-                OnPropertyChanged(nameof(TotalIncomeList));
+                if (_totalIncomeList != value)
+                {
+                    _totalIncomeList = value;
+                    OnPropertyChanged(nameof(TotalIncomeList));
+                }
             }
         }
 
-        private ObservableCollection<ParentCategoryViewModel> _necessarilyList;
-        public ObservableCollection<ParentCategoryViewModel> AverageIncomeList
+        private ObservableCollection<ParentCategoryViewModel>? _necessarilyList;
+        public ObservableCollection<ParentCategoryViewModel>? AverageIncomeList
         {
             get { return _necessarilyList; }
             set
             {
-                _necessarilyList = value;
-                OnPropertyChanged(nameof(AverageIncomeList));
+                if (_necessarilyList != value)
+                {
+                    _necessarilyList = value;
+                    OnPropertyChanged(nameof(AverageIncomeList));
+                }
             }
         }
 
-        public ISeries[] _series_Balance;
-        public ISeries[] Series_Balance
+        public ISeries[]? _series_Balance;
+        public ISeries[]? Series_Balance
         {
             get => _series_Balance;
             set
             {
                 if (_series_Balance != value)
                 {
-                    _series_Balance = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(Series_Balance));
+                    if (_series_Balance != value)
+                    {
+                        _series_Balance = value;
+                        OnPropertyChanged();
+                    }
                 }
             }
         }
 
-        private Func<double, string> _dateFormatter;
+        private Func<double, string> _dateFormatter = v => new DateTime((long) v).ToString("dd MMM");
         public Func<double, string> DateFormatter
         {
             get => _dateFormatter;
@@ -195,19 +211,18 @@ namespace Finace.ViewModels
             }
         }
 
-        public Axis[] XAxes => new Axis[]
-        {
-            new Axis
-            {
+        public Axis[] XAxes =>
+        [
+            new() {
                 Labeler = DateFormatter,
                 UnitWidth = TimeSpan.FromDays(1).Ticks
             }
-        };
+        ];
 
-        public Axis[] YAxes => new Axis[]
-        {
-            new Axis()
-        };
+        public static Axis[] YAxes =>
+        [
+            new()
+        ];
 
         private bool _anyDateCheckBox;
         public bool AnyDateCheckBox
@@ -217,9 +232,11 @@ namespace Finace.ViewModels
             {
                 if (_anyDateCheckBox != value)
                 {
-                    _anyDateCheckBox = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(AnyDateCheckBox));
+                    if (_anyDateCheckBox != value)
+                    {
+                        _anyDateCheckBox = value;
+                        OnPropertyChanged();
+                    }
                 }
             }
         }
@@ -234,7 +251,6 @@ namespace Finace.ViewModels
                 {
                     _dateFrom = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(DateFrom));
                 }
             }
         }
@@ -249,13 +265,12 @@ namespace Finace.ViewModels
                 {
                     _dateTo = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(DateTo));
                 }
             }
         }
 
-        public ObservableCollection<int> Months { get; set; }
-        public ObservableCollection<int> Years { get; set; }
+        public ObservableCollection<int>? Months { get; set; }
+        public ObservableCollection<int>? Years { get; set; }
 
         private int? _selectedYear;
         public int? SelectedYear
@@ -302,7 +317,6 @@ namespace Finace.ViewModels
             _transactionService = transactionService;
 
             initDates();
-            DateFormatter = value => new DateTime((long)value).ToString("dd MMM");
             DaysOrMonthsForAverage = "1";
             IncludeTagsCheckBox = true;
             UnitAverage = "месяц";
@@ -325,8 +339,8 @@ namespace Finace.ViewModels
                 return;
             }
 
-            Series_Balance = new ISeries[]
-            {
+            Series_Balance =
+            [
                 new LineSeries<DateTimePoint>
                 {
                     Name = "Баланс",
@@ -337,7 +351,7 @@ namespace Finace.ViewModels
                     GeometryStroke = new SolidColorPaint(new SKColor(157, 119, 207), 2),
                     GeometryFill = new SolidColorPaint(new SKColor(255, 255, 255))
                 }
-            };
+            ];
             UpdateCategories();
         }
         

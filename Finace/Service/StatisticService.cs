@@ -18,7 +18,7 @@ namespace Finace.Service
 
         public List<CategoryAmount> BudgetNecessarilyForPeriod(Period? period, bool includeTags)
         {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+            if (_allTransactions is null || _allTransactions.Count == 0) return [];
 
             var transactionsNecessarily = _allTransactions
                 .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
@@ -27,7 +27,7 @@ namespace Finace.Service
                 .Where(r => r.Note != "Корректировка остатка")
                 .Where(r => _settings.CategoriesNecessarily?.Contains(r.Category ?? "") ?? false);
 
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+            if (!transactionsNecessarily.Any()) return [];
 
             if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
 
@@ -41,7 +41,7 @@ namespace Finace.Service
 
         public List<CategoryAmount> BudgetNotNecessarilyForPeriod(Period? period, bool includeTags)
         {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+            if (_allTransactions is null || _allTransactions.Count == 0) return [];
 
             var transactionsNecessarily = _allTransactions
                 .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
@@ -64,7 +64,7 @@ namespace Finace.Service
 
         public List<CategoryAmount> CategoryExpensesForPeriod(Period? period, bool includeTags, int take = int.MaxValue)
         {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+            if (_allTransactions is null || _allTransactions.Count == 0) return [];
 
             var transactionsNecessarily = _allTransactions
                 .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
@@ -72,7 +72,7 @@ namespace Finace.Service
                 .Where(r => r.Amount < 0)
                 .Where(r => r.Note != "Корректировка остатка");
 
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+            if (!transactionsNecessarily.Any()) return [];
 
             if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
 
@@ -88,7 +88,7 @@ namespace Finace.Service
 
         public List<CategoryAmount> CategoryIncomeForPeriod(Period? period, bool includeTags)
         {
-            if (_allTransactions is null || !_allTransactions.Any()) return new List<CategoryAmount>();
+            if (_allTransactions is null || _allTransactions.Count == 0) return [];
 
             var transactionsNecessarily = _allTransactions
                 .Where(r => period == null || r.Date >= period.startDate && r.Date <= period.endDate)
@@ -96,7 +96,7 @@ namespace Finace.Service
                 .Where(r => r.Amount > 0)
                 .Where(r => r.Note != "Корректировка остатка");
 
-            if (!transactionsNecessarily.Any()) return new List<CategoryAmount>();
+            if (!transactionsNecessarily.Any()) return [];
 
             if (!includeTags) transactionsNecessarily = transactionsNecessarily.Where(r => !(_settings.Tags?.Contains(r.Tags ?? "") ?? false));
 
@@ -112,7 +112,7 @@ namespace Finace.Service
         {
             var result = new List<DataPoint>();
 
-            if (_allTransactions is null || !_allTransactions.Any()) return result;
+            if (_allTransactions is null || _allTransactions.Count == 0) return result;
 
             var transactionsForPeriod = _allTransactions
                 .Where(r => r.Date >= period.startDate && r.Date <= period.endDate)
