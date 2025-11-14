@@ -4,6 +4,8 @@
                     xmlns:converters="clr-namespace:Finace.Converters">
 
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
+    <converters:CountToVisibilityConverter  x:Key="CountToVisibilityConverter" />
     <converters:BoolToAngleConverter x:Key="BoolToAngleConverter" />
     <converters:CountToHeightConverter x:Key="CountToHeightConverter"
                                        ItemHeight="28" />
@@ -21,7 +23,8 @@
                         Background="#423f38"
                         BorderThickness="0"
                         Padding="0"
-                        HorizontalContentAlignment="Stretch">
+                        HorizontalContentAlignment="Stretch"
+                        IsEnabled="{Binding Subcategories.Count, Converter={StaticResource CountToBoolConverter}}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Background"
@@ -37,32 +40,22 @@
                                                 Background="{TemplateBinding Background}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="4">
+                                                CornerRadius="4"
+                                                Opacity="1">
                                             <ContentPresenter />
                                         </Border>
                                         <ControlTemplate.Triggers>
-                                            <!-- Hover -->
                                             <Trigger Property="IsMouseOver"
                                                      Value="True">
                                                 <Setter TargetName="border"
                                                         Property="Background"
                                                         Value="#565147" />
                                             </Trigger>
-                                            <!-- Pressed -->
                                             <Trigger Property="IsPressed"
                                                      Value="True">
                                                 <Setter TargetName="border"
                                                         Property="Background"
                                                         Value="#2e2b26" />
-                                            </Trigger>
-                                            <!-- Disabled -->
-                                            <Trigger Property="IsEnabled"
-                                                     Value="False">
-                                                <Setter TargetName="border"
-                                                        Property="Background"
-                                                        Value="#2d2a25" />
-                                                <Setter Property="Foreground"
-                                                        Value="#888" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -74,7 +67,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
@@ -89,7 +82,7 @@
                                    VerticalAlignment="Center"
                                    Text="{Binding Total, StringFormat=N0, ConverterCulture=ru-RU}"
                                    FontSize="14"
-                                   Margin="8,6,8,6"
+                                   Margin="0,5,2,7"
                                    FontWeight="SemiBold"
                                    Foreground="#f7f4e9" />
 
@@ -99,7 +92,8 @@
                               Data="M 0 0 L 6 6 L 0 12"
                               Stroke="White"
                               StrokeThickness="2"
-                              RenderTransformOrigin="0.5,0.5">
+                              RenderTransformOrigin="0.5,0.5"
+                              Visibility="{Binding Subcategories.Count, Converter={StaticResource CountToVisibilityConverter}}">
                             <Path.RenderTransform>
                                 <RotateTransform Angle="{Binding IsExpanded, Converter={StaticResource BoolToAngleConverter}}" />
                             </Path.RenderTransform>
